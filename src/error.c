@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl.c                                       :+:      :+:    :+:   */
+/*   eror.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwillem- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/04 20:45:12 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/05/27 22:12:52 by gabshire         ###   ########.fr       */
-.fr       */
-=======
-/*   Updated: 2019/05/27 20:47:46 by gabshire         ###   ########.fr       */
->>>>>>> fb9e556692d728112600df6146e828d5a9e9706a
+/*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
+/*   Updated: 2019/05/27 21:07:24 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
+#include "op.h"
 
-void	ft_putendl(char const *s)
+void	ft_error(int er)
 {
-	ft_putstr(s);
-	ft_putchar('\n');
+	er == 0 ? ft_printf("clean file\n") : 0;
+	er == 1 ? ft_printf("syntax error\n") : 0;
 }
