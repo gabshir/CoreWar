@@ -6,16 +6,16 @@
 #    By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 17:32:16 by jwillem-          #+#    #+#              #
-#    Updated: 2019/05/15 13:37:08 by gabshire         ###   ########.fr        #
+#    Updated: 2019/05/27 14:19:42 by jwillem-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := libftprintf.a
 
 PFDIR := ft_printf/
-PF :=   create_struct	find_specifier		ft_printf	get_value	handling_specifier \
-		type_a		type_c		type_di		type_e		type_f		type_g		type_oux \
-		type_p		type_percent	type_s	type_non	type_n		rounding_a \
+PF :=   ft_char		parseng		spec 	printf 		ft_printstr		over	\
+	printnbr_logik	 printtnbr	 flagidiux	 ft_printx	 unicod		unicod_str	\
+	float	 floatlong	 floatob	\
 
 LSTDIR := ft_lst/
 LST :=	ft_lstadd	ft_lstdel	ft_lstdelone	ft_lstiter	ft_lstlen	ft_lstmap \
@@ -37,7 +37,7 @@ STR :=	ft_atoi		ft_close_file	ft_intlen	ft_isalnum	ft_isalpha	ft_isascii	ft_isdi
 		ft_strsub	ft_strtoupper	ft_strtrim	ft_tolower		ft_toupper			ft_uitoa_base	\
 		get_next_line 	ft_swap		ft_freesplit\
 
-COMPILE := gcc -Wall -Wextra -Werror -g
+COMPILE := gcc -Wall -Wextra -Werror -g -o2
 OBJDIR := obj/
 SRCDIR := srcs/
 INCDIR := includes/
