@@ -6,7 +6,7 @@
 /*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/27 20:33:49 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/05/27 21:58:18 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@ void	checkname(int fd, header_t *chemp)
 	ft_strncmp(NAME_CMD_STRING, line, len) ? ft_eroror(1) : 0;
 	while(line[len] && (line[len] == ' ' || line[len] == '\t'))
 		++len;
-	line[len] && line[len] == '"' ? len : ft_eroror(1);
-	while(i < PROG_NAME_LENGTH && len && line[len] != '"')
+	line[len] && line[len] == '"' ? ++len : ft_eroror(1);
+	while(i < PROG_NAME_LENGTH && line[len] && line[len] != '"')
 	{
 		chemp->prog_name[i] = line[len];
 		++i;
 		++len;
 	}
+	i <= PROG_NAME_LENGTH && line[len] != '"' ? ft_eroror(1) : 0;
+	line[len] == '"' && line[len + 1] ? ft_eroror(1) : 0;
+	free(line);
 
 }
 
@@ -46,6 +49,7 @@ void	readfile(int fd)
 	chemp.magic = COREWAR_EXEC_MAGIC;
 	line = NULL;
 	checkname(fd, &chemp);
+	ft_printf("%s\n", chemp.prog_name);
 }
 
 int main(int a, char **b)
@@ -57,4 +61,6 @@ int main(int a, char **b)
 		exit(1);
 	}
 	fd = ft_read_file(b[1]);
+	readfile(fd);
+	return (0);
 }
