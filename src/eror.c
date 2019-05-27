@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_striter.c                                       :+:      :+:    :+:   */
+/*   eror.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwillem- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/01 17:41:06 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/05/27 20:47:46 by gabshire         ###   ########.fr       */
+/*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
+/*   Updated: 2019/05/27 20:11:35 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
+#include "op.h"
 
-void	ft_striter(char *s, void (*f)(char *))
+void	ft_eroror(int er)
 {
-	if (s != NULL && f != NULL)
-		while (*s != '\0')
-			f(s++);
+	er == 0 ? ft_printf("clean file\n") : 0;
+	er == 1 ? ft_printf("syntax error\n") : 0;
 }
