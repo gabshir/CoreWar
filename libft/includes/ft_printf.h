@@ -6,8 +6,8 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/23 03:47:46 by gabshire          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2019/05/28 18:06:12 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/05/28 19:33:38 by gabshire         ###   ########.fr       */
+.fr       */
 =======
 /*   Updated: 2019/05/28 15:30:16 by gabshire         ###   ########.fr       */
 >>>>>>> master
