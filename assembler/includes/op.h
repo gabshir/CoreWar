@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/28 18:37:06 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/05/28 19:17:53 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 */
 #ifndef OP_H
 # define OP_H
+
+# include "ft_printf.h"
 
 # define IND_SIZE	2
 # define REG_SIZE	4
@@ -77,6 +79,11 @@ typedef struct	s_header
 	unsigned int	prog_size;
 	char			comment[COMMENT_LENGTH + 1];
 }				t_header;
+
+// typedef struct	s_op
+// {
+	
+// }				t_op;
 
 void	ft_error(int er);
 
