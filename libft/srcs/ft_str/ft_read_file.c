@@ -21,6 +21,7 @@ int		ft_read_file(char *filename)
 		ft_putstr("Error: could not open file \"");
 		ft_putstr(filename);
 		ft_putstr("\".\n");
+		exit(1);
 	}
 	return (fd);
 }
