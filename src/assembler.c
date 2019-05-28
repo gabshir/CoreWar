@@ -6,12 +6,64 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/28 15:22:05 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/05/28 18:34:24 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "op.h"
+
+int        last_check(size_t i, const char *line)
+{
+	while (line[i])
+	{
+		if (line[i] == ' ' || line[i] == '\t')
+			++i;
+		else if (line[i] == COMMENT_CHAR || line[i] == ALT_COMMENT_CHAR)
+			break ;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+size_t quick_pass(char *line)
+{
+	size_t i;
+
+	i = 0;
+	while (line[i] == ' ' || line[i] =='\t')
+		++i;
+	return (++i);
+}
+
+char    *checkform(int fd)
+{
+	char	*line;
+	size_t	i;
+
+	line = NULL;
+	while (get_next_line(fd, &line))
+	{
+		i = 0;
+		while (line[i])
+		{
+			if (line[i] == COMMENT_CHAR || line[i] == ALT_COMMENT_CHAR)
+			{
+				free(line);
+				line = NULL;
+				break ;
+			}
+			if (line[i] == ' ' || line[i] == '\t')
+				++i;
+			else
+				return (line);
+		}
+		free(line);
+		line = NULL;
+	}
+	return (NULL);
+}
 
 int	ft_strncmpm(char *s1, char *s2)
 {
@@ -30,7 +82,7 @@ int	ft_strncmpm(char *s1, char *s2)
 	return (len);
 }
 
-void	checkname(int fd, header_t *chemp)
+void	checkname(int fd, t_header *chemp)
 {
 	char	*line;
 	int		i;
@@ -61,7 +113,7 @@ void	checkname(int fd, header_t *chemp)
 void	readfile(int fd)
 {
 	char *line;
-	header_t chemp;
+	t_header chemp;
 
 	ft_bzero(&chemp, sizeof(chemp));
 	chemp.magic = COREWAR_EXEC_MAGIC;
