@@ -6,38 +6,56 @@
 /*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/27 21:58:18 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/05/28 14:13:00 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "op.h"
 
+int	ft_strncmpm(char *s1, char *s2)
+{
+	int len;
+
+	len  = 0;
+	while (s1[len] && (s1[len] == ' ' || s1[len] == '\t'))
+		++len;
+	while (s1[len] && *s2)
+	{
+		if (s1[len] != *s2)
+			return (-1);
+		++len;
+		++s2;
+	}
+	return (len);
+}
+
 void	checkname(int fd, header_t *chemp)
 {
-	char *line;
-	int len;
-	int i;
+	char	*line;
+	int		i;
+	int		j;
 
 	line = NULL;
 	i = 0;
 	get_next_line(fd, &line);
 	!line ? ft_eroror(0) : 0;
-	len = ft_strlen(NAME_CMD_STRING);
-	ft_strncmp(NAME_CMD_STRING, line, len) ? ft_eroror(1) : 0;
-	while(line[len] && (line[len] == ' ' || line[len] == '\t'))
-		++len;
-	line[len] && line[len] == '"' ? ++len : ft_eroror(1);
-	while(i < PROG_NAME_LENGTH && line[len] && line[len] != '"')
+	j = ft_strncmpm(line, NAME_CMD_STRING);
+	j == -1 ? ft_eroror(1) : 0;
+	while (line[j] && line[j] == ' ' && line[j] == '\t')
+		++j;
+	line[j] ? ++j : ft_eroror(1);
+	line[j] && line[j] == '"' ? ++j : ft_eroror(1);
+	while(i < PROG_NAME_LENGTH && line[j] && line[j] != '"')
 	{
-		chemp->prog_name[i] = line[len];
+		chemp->prog_name[i] = line[j];
 		++i;
-		++len;
+		++j;
 	}
-	i <= PROG_NAME_LENGTH && line[len] != '"' ? ft_eroror(1) : 0;
-	line[len] == '"' && line[len + 1] ? ft_eroror(1) : 0;
+	i <= PROG_NAME_LENGTH && line[j] != '"' ? ft_eroror(1) : ++j;
+	line[j] ? ft_eroror(1) : 0;
 	free(line);
-
+	line = NULL;
 }
 
 void	readfile(int fd)

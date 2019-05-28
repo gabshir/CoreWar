@@ -17,4 +17,5 @@ void	ft_eroror(int er)
 {
 	er == 0 ? ft_printf("clean file\n") : 0;
 	er == 1 ? ft_printf("syntax error\n") : 0;
+	exit(1);
 }
