@@ -3,21 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   assembler.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/28 16:11:42 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/05/28 17:49:58 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "op.h"
 
-size_t quick_pass(char *line)
+size_t quick_pass(const char *line, size_t i)
 {
-	size_t i;
-
-	i = 0;
 	while (line[i] == ' ' || line[i] =='\t')
 		++i;
 	return (i);
@@ -51,30 +48,71 @@ char	*checkform(int fd)
 	return (NULL);
 }
 
+int		command_comparison(size_t i,const char *line)
+{
+	size_t j;
+
+	j = 0;
+	!NAME_CMD_STRING ? ft_error(1) : 0;
+	while (NAME_CMD_STRING[j] && line[i])
+	{
+		if (NAME_CMD_STRING[j] == line[i])
+		{
+			++j;
+			++i;
+		}
+		else
+			ft_error(1);
+	}
+	!line[i] && NAME_CMD_STRING[j] ? ft_error(1) : 0;
+	line[i] && NAME_CMD_STRING[j] ? ft_error(1) : 0;
+	return (i);
+}
+
+int		last_check(size_t i, const char *line)
+{
+	while (line[i])
+	{
+		if (line[i] == ' ' || line[i] == '\t')
+			++i;
+		else if (line[i] == COMMENT_CHAR || line[i] == ALT_COMMENT_CHAR)
+			break ;
+		else
+			return (1);
+	}
+	return (0);
+}
+
 void	checkname(int fd, header_t *chemp)
 {
-	char	*line;
-	int		i;
-	int		j;
+	char		*line;
+	size_t		i;
+	size_t		j;
 
 	i = 0;
 	line = checkform(fd);
 	!line ? ft_error(0) : 0;
-	j == -1 ? ft_error(1) : 0;
-	while (line[j] && line[j] == ' ' && line[j] == '\t')
-		++j;
-	line[j] ? ++j : ft_error(1);
+	j = quick_pass(line, 0);
+	j = command_comparison(j, line);
+	j = quick_pass(line, j);
 	line[j] && line[j] == '"' ? ++j : ft_error(1);
-	while(i < PROG_NAME_LENGTH && line[j] && line[j] != '"')
+	while(i < PROG_NAME_LENGTH && line[j] != '"')
 	{
 		chemp->prog_name[i] = line[j];
 		++i;
 		++j;
+		if (!line[j])
+		{
+			free(line);
+			line = NULL;
+			chemp->prog_name[i] = '\n';
+			++i;
+			get_next_line(fd, &line);
+			line ? j = 0 : ft_error(1);
+		}
 	}
-	i <= PROG_NAME_LENGTH && line[j] != '"' ? ft_error(1) : ++j;
-	line[j] ? ft_error(1) : 0;
-	free(line);
-	line = NULL;
+	i == PROG_NAME_LENGTH && line[j] != '"' ? ft_error(1) : ++j;
+	last_check(j, line) ? ft_error(1) : 0;
 }
 
 void	readfile(int fd)
