@@ -6,7 +6,7 @@
 /*   By: wballaba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/15 17:04:59 by wballaba          #+#    #+#             */
-/*   Updated: 2019/05/27 22:23:49 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/05/28 18:06:12 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int		ft_read_file(char *filename)
 		ft_putstr("Error: could not open file \"");
 		ft_putstr(filename);
 		ft_putstr("\".\n");
+		exit(1);
 	}
 	return (fd);
 }

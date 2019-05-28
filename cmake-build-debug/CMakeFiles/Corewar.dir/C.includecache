@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../libft/includes/ft_printf.h
+libft.h
+../libft/includes/libft.h
+sys/types.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+stdarg.h
+-
+wchar.h
+-
+limits.h
+-
+stdlib.h
+-
+
+../libft/includes/libft.h
+string.h
+-
+stdlib.h
+-
+unistd.h
+-
+fcntl.h
+-
+
+../src/include/op.h
+
+/Users/gabshire/Desktop/Corewar/src/assembler.c
+ft_printf.h
+/Users/gabshire/Desktop/Corewar/src/ft_printf.h
+op.h
+/Users/gabshire/Desktop/Corewar/src/op.h
+
