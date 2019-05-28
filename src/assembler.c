@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assembler.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/28 14:13:00 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/05/28 15:22:05 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,21 @@ void	checkname(int fd, header_t *chemp)
 	line = NULL;
 	i = 0;
 	get_next_line(fd, &line);
-	!line ? ft_eroror(0) : 0;
+	!line ? ft_error(0) : 0;
 	j = ft_strncmpm(line, NAME_CMD_STRING);
-	j == -1 ? ft_eroror(1) : 0;
+	j == -1 ? ft_error(1) : 0;
 	while (line[j] && line[j] == ' ' && line[j] == '\t')
 		++j;
-	line[j] ? ++j : ft_eroror(1);
-	line[j] && line[j] == '"' ? ++j : ft_eroror(1);
+	line[j] ? ++j : ft_error(1);
+	line[j] && line[j] == '"' ? ++j : ft_error(1);
 	while(i < PROG_NAME_LENGTH && line[j] && line[j] != '"')
 	{
 		chemp->prog_name[i] = line[j];
 		++i;
 		++j;
 	}
-	i <= PROG_NAME_LENGTH && line[j] != '"' ? ft_eroror(1) : ++j;
-	line[j] ? ft_eroror(1) : 0;
+	i <= PROG_NAME_LENGTH && line[j] != '"' ? ft_error(1) : ++j;
+	line[j] ? ft_error(1) : 0;
 	free(line);
 	line = NULL;
 }
