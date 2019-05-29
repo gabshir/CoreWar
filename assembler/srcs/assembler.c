@@ -6,12 +6,33 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/29 19:16:03 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/05/29 22:21:19 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "op.h"
+
+void    cheackmet(char *str)
+{
+	unsigned i;
+	unsigned j;
+
+	i = 0;
+	while(str[i])
+	{
+		j = 0;
+		while(LABEL_CHARS[j])
+		{
+			if (str[i] != LABEL_CHARS[j])
+				++j;
+			else
+				break;
+		}
+		!LABEL_CHARS[j] ? ft_error(1) : 0;
+		++i;
+	}
+}
 
 size_t quick_pass(const char *line, size_t i)
 {
@@ -190,6 +211,8 @@ void	cheackmet(const char *str)
 		!LABEL_CHARS[j] ? ft_error(1) : 0;
 		++i;
 	}
+=======
+>>>>>>> bb39599813de8a29610d87a68d628229604d112e
 }
 
 int main(int a, char **b)
@@ -203,7 +226,10 @@ int main(int a, char **b)
 	checkmakros();
 	fd = ft_read_file(b[1]);
 	readfile(fd);
+<<<<<<< HEAD
 
+=======
+>>>>>>> bb39599813de8a29610d87a68d628229604d112e
 	close(fd);
 	return (0);
 }
