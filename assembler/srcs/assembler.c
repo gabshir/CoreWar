@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/28 18:36:50 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/05/29 17:29:22 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,16 @@ char	*checkform(int fd)
 	return (NULL);
 }
 
-int		command_comparison(size_t i,const char *line)
+int		command_comparison(size_t i,const char *line, int f)
 {
 	size_t j;
+	char *str;
 
 	j = 0;
-	!NAME_CMD_STRING ? ft_error(1) : 0;
-	while (NAME_CMD_STRING[j] && line[i])
+	str = f == 0 ? NAME_CMD_STRING : COMMENT_CMD_STRING;
+	while (str[j] && line[i])
 	{
-		if (NAME_CMD_STRING[j] == line[i])
+		if (str[j] == line[i])
 		{
 			++j;
 			++i;
@@ -64,12 +65,12 @@ int		command_comparison(size_t i,const char *line)
 		else
 			ft_error(1);
 	}
-	!line[i] && NAME_CMD_STRING[j] ? ft_error(1) : 0;
-	line[i] && NAME_CMD_STRING[j] ? ft_error(1) : 0;
+	!line[i] && str[j] ? ft_error(1) : 0;
+	line[i] && str[j] ? ft_error(1) : 0;
 	return (i);
 }
 
-int		last_check(size_t i, const char *line)
+int		last_check(size_t i, char *line)
 {
 	while (line[i])
 	{
@@ -78,53 +79,96 @@ int		last_check(size_t i, const char *line)
 		else if (line[i] == COMMENT_CHAR || line[i] == ALT_COMMENT_CHAR)
 			break ;
 		else
-			return (1);
+			{
+				free(line);
+				line = NULL;
+				return (1);
+			}
 	}
+	free(line);
+	line = NULL;
 	return (0);
 }
 
-void	checkname(int fd, t_header *chemp)
+void	checkname(int fd, t_header *chemp, size_t j, char *line, int f)
 {
-	char		*line;
 	size_t		i;
-	size_t		j;
+	unsigned	length;
 
 	i = 0;
-	line = checkform(fd);
-	!line ? ft_error(0) : 0;
-	j = quick_pass(line, 0);
-	j = command_comparison(j, line);
+	length = f == 0 ? PROG_NAME_LENGTH : COMMENT_LENGTH;
+	j = command_comparison(j, line, f);
 	j = quick_pass(line, j);
 	line[j] && line[j] == '"' ? ++j : ft_error(1);
-	while(i < PROG_NAME_LENGTH && line[j] != '"')
+	while(i < length && line[j] != '"')
 	{
-		chemp->prog_name[i] = line[j];
-		++i;
-		++j;
-		if (!line[j])
+		while (!line[j])
 		{
+			f == 0 ? chemp->prog_name[i] = '\n' : 0;
+			f == 1 ? chemp->comment[i] = '\n' : 0;
 			free(line);
 			line = NULL;
-			chemp->prog_name[i] = '\n';
+			j = 0;
 			++i;
-			get_next_line(fd, &line);
-			line ? j = 0 : ft_error(1);
+			if (!get_next_line(fd, &line))
+				break ;
 		}
+		if (line[j] == '"')
+			break ;
+		f == 0 ? chemp->prog_name[i] = line[j] : 0;
+		f == 1 ? chemp->comment[i] = line[j] : 0;
+		++i;
+		++j;
 	}
-	i == PROG_NAME_LENGTH && line[j] != '"' ? ft_error(1) : ++j;
+	i == length && line[j] != '"' ? ft_error(1) : ++j;
 	last_check(j, line) ? ft_error(1) : 0;
 }
 
 void	readfile(int fd)
 {
-	char *line;
-	t_header chemp;
+	char		*line;
+	t_header	chemp;
+	size_t		j;
+	char		str[2];
 
 	ft_bzero(&chemp, sizeof(chemp));
+	ft_bzero(&str, 2);
 	chemp.magic = COREWAR_EXEC_MAGIC;
 	line = NULL;
-	checkname(fd, &chemp);
+	while(!str[0] || !str[1])
+	{
+		line = checkform(fd);
+		!line ? ft_error(0) : 0;
+		j = quick_pass(line, 0);
+		line[j] != '.' ? ft_error(1) : 0;
+		if (line[j + 1] && line[j + 1] == NAME_CMD_STRING[1])
+		{
+			str[0] = 1;
+			checkname(fd, &chemp, j, line, 0);
+		}
+		else if (line[j + 1] && line[j + 1] == COMMENT_CMD_STRING[1])
+		{
+			str[1] = 1;
+			checkname(fd, &chemp, j, line, 1);
+		}
+		else
+			ft_error(1);
+	}
 	ft_printf("%s\n", chemp.prog_name);
+	ft_printf("%s\n", chemp.comment);
+}
+
+void	checkmakros(void)
+{
+	NAME_CMD_STRING <= 0 || PROG_NAME_LENGTH <= 0 ||
+	COMMENT_LENGTH <= 0 || !COREWAR_EXEC_MAGIC ||
+	!COMMENT_CMD_STRING || !ALT_COMMENT_CHAR  || !LABEL_CHAR ||
+	!DIRECT_CHAR || !SEPARATOR_CHAR || !LABEL_CHARS || REG_NUMBER <= 0 ||
+	CYCLE_TO_DIE <= 0 || CYCLE_DELTA <= 0 || NBR_LIVE <= 0 || MAX_CHECKS <= 0
+	|| IND_SIZE <= 0  || REG_SIZE <= 0 || !DIR_SIZE || REG_CODE <= 0 ||
+	DIR_CODE <= 0 || IND_CODE <= 0 || MAX_ARGS_NUMBER <= 0 || MAX_PLAYERS <= 0
+	|| MEM_SIZE <= 0 || T_REG <= 0 || T_DIR <= 0 || T_IND <= 0 || T_LAB <= 0?
+	ft_error(1) : 0;
 }
 
 int main(int a, char **b)
@@ -135,7 +179,9 @@ int main(int a, char **b)
 		write(2, "usage", 5);
 		exit(1);
 	}
+	checkmakros();
 	fd = ft_read_file(b[1]);
 	readfile(fd);
+	close(fd);
 	return (0);
 }
