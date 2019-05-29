@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/28 19:17:53 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/05/28 21:46:57 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,17 @@ typedef struct	s_header
 	char			comment[COMMENT_LENGTH + 1];
 }				t_header;
 
-// typedef struct	s_op
-// {
-	
-// }				t_op;
+typedef struct	s_op
+{
+	unsigned char	cmd[6];
+	unsigned char	arg_q;
+	unsigned char	arg_type[3];
+	unsigned char	opcode;
+	unsigned int	cycles;
+	unsigned char	descrip[37];
+	unsigned char	a_typecode;
+	unsigned char	dir_size;
+}				t_op;
 
 void	ft_error(int er);
 
