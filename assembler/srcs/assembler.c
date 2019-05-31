@@ -6,12 +6,18 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/29 19:24:52 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/05/31 15:53:20 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include "op.h"
+#include "asm.h"
+
+void	quick_pass(t_all *all)
+{
+	while(all->line[all->i] && (all->line[all->i] == ' '
+	|| all->line[all->i] == '\t'))
+		++all->i;
+}
 
 void    cheackmet(char *str)
 {
@@ -34,149 +40,142 @@ void    cheackmet(char *str)
 	}
 }
 
-size_t quick_pass(const char *line, size_t i)
+void	checkform(t_all *all)
 {
-	while (line[i] == ' ' || line[i] =='\t')
-		++i;
-	return (i);
-}
-
-char	*checkform(int fd)
-{
-	char	*line;
-	size_t	i;
-
-	line = NULL;
-	while (get_next_line(fd, &line))
+	while (get_next_line(all->fd, &all->line))
 	{
-		i = 0;
-		while (line[i])
+		all->i = 0;
+		while (all->line[all->i])
 		{
-			if (line[i] == COMMENT_CHAR || line[i] == ALT_COMMENT_CHAR)
+			if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR)
 			{
-				free(line);
-				line = NULL;
+				free(all->line);
+				all->line = NULL;
 				break ;
 			}
-			if (line[i] == ' ' || line[i] == '\t')
-				++i;
+			if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
+				++all->i;
 			else
-				return (line);
+				return ;
+			++all->st;
 		}
-		free(line);
-		line = NULL;
+		free(all->line);
+		all->line = NULL;
 	}
-	return (NULL);
 }
 
-int		command_comparison(size_t i,const char *line, int f)
+int		last_check(t_all *all)
 {
-	size_t j;
-	char *str;
+	char	c;
+	char	ac;
 
-	j = 0;
-	str = f == 0 ? NAME_CMD_STRING : COMMENT_CMD_STRING;
-	while (str[j] && line[i])
+	c = COMMENT_CHAR;
+	ac = ALT_COMMENT_CHAR;
+	while (all->line[all->i])
 	{
-		if (str[j] == line[i])
-		{
-			++j;
-			++i;
-		}
-		else
-			ft_error(1);
-	}
-	!line[i] && str[j] ? ft_error(1) : 0;
-	line[i] && str[j] ? ft_error(1) : 0;
-	return (i);
-}
-
-int		last_check(size_t i, char *line)
-{
-	while (line[i])
-	{
-		if (line[i] == ' ' || line[i] == '\t')
-			++i;
-		else if (line[i] == COMMENT_CHAR || line[i] == ALT_COMMENT_CHAR)
+		if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
+			++all->i;
+		else if (all->line[all->i] == c || all->line[all->i] == ac)
 			break ;
 		else
 			{
-				free(line);
-				line = NULL;
+				free(all->line);
+				all->line = NULL;
 				return (1);
 			}
+		++all->st;
 	}
-	free(line);
-	line = NULL;
+	free(all->line);
+	all->line = NULL;
+	all->i = 0;
+	++all->st;
 	return (0);
 }
 
-void	checkname(int fd, t_header *chemp, size_t j, char *line, int f)
+void	checkname(t_all *all, int f)
 {
 	size_t		i;
 	unsigned	length;
 
 	i = 0;
 	length = f == 0 ? PROG_NAME_LENGTH : COMMENT_LENGTH;
-	j = command_comparison(j, line, f);
-	j = quick_pass(line, j);
-	line[j] && line[j] == '"' ? ++j : ft_error(1);
-	while(i < length && line[j] != '"')
+	quick_pass(all);
+	all->line[all->i] && all->line[all->i]  == '"' ? ++all->i : ft_error(1);
+	while(i < length && all->line[all->i] != '"')
 	{
-		while (!line[j])
+		while (!all->line[all->i])
 		{
-			f == 0 ? chemp->prog_name[i] = '\n' : 0;
-			f == 1 ? chemp->comment[i] = '\n' : 0;
-			free(line);
-			line = NULL;
-			j = 0;
+			f == 0 ? all->prog_name[i] = '\n' : 0;
+			f == 1 ? all->comment[i] = '\n' : 0;
+			++all->st;
+			free(all->line);
+			all->line = NULL;
+			all->i = 0;
 			++i;
-			if (!get_next_line(fd, &line))
+			if (!get_next_line(all->fd, &all->line))
 				break ;
 		}
-		if (line[j] == '"')
+		if (all->line[all->i] == '"')
 			break ;
-		f == 0 ? chemp->prog_name[i] = line[j] : 0;
-		f == 1 ? chemp->comment[i] = line[j] : 0;
+		f == 0 ? all->prog_name[i] = all->line[all->i] : 0;
+		f == 1 ? all->comment[i] = all->line[all->i] : 0;
 		++i;
-		++j;
+		++all->i;
 	}
-	i == length && line[j] != '"' ? ft_error(1) : ++j;
-	last_check(j, line) ? ft_error(1) : 0;
+	i == length && all->line[all->i] != '"' ? ft_error(1) : ++all->i;
+	last_check(all) ? ft_error(1) : 0;
 }
 
-void	readfile(int fd)
+int cheak_name_and_comment(t_all *all, int f)
 {
-	char		*line;
-	t_header	chemp;
-	size_t		j;
+	unsigned	i;
+	unsigned	j;
+	char		*str;
+
+	i = 0;
+	j = all->i;
+	str = f == 0 ? NAME_CMD_STRING : COMMENT_CMD_STRING;
+	while(str[i])
+	{
+		if (all->line[all->i] == str[i])
+		{
+			++i;
+			++all->i;
+		}
+		else
+			break ;
+	}
+	if (!str[i])
+		return (1);
+	all->i = j;
+	return (0);
+}
+
+void	readfile(t_all *all)
+{
 	char		str[2];
 
-	ft_bzero(&chemp, sizeof(chemp));
 	ft_bzero(&str, 2);
-	chemp.magic = COREWAR_EXEC_MAGIC;
-	line = NULL;
+	all->magic = COREWAR_EXEC_MAGIC;
 	while(!str[0] || !str[1])
 	{
-		line = checkform(fd);
-		!line ? ft_error(0) : 0;
-		j = quick_pass(line, 0);
-		line[j] != '.' ? ft_error(1) : 0;
-		if (line[j + 1] && line[j + 1] == NAME_CMD_STRING[1])
+		checkform(all);
+		!all->line ? ft_error(0) : 0;
+		if (cheak_name_and_comment(all, 0))
 		{
 			str[0] = 1;
-			checkname(fd, &chemp, j, line, 0);
+			checkname(all, 0);
 		}
-		else if (line[j + 1] && line[j + 1] == COMMENT_CMD_STRING[1])
+		else if (cheak_name_and_comment(all, 1))
 		{
 			str[1] = 1;
-			checkname(fd, &chemp, j, line, 1);
+			checkname(all, 1);
 		}
 		else
 			ft_error(1);
 	}
-	ft_printf("%s\n", chemp.prog_name);
-	ft_printf("%s\n", chemp.comment);
+	ft_printf("%s\n", all->prog_name);
+	ft_printf("%s\n", all->comment);
 }
 
 void	checkmakros(void)
@@ -195,6 +194,7 @@ void	checkmakros(void)
 int main(int a, char **b)
 {
 	int fd;
+	t_all	all;
 	if (a != 2)
 	{
 		write(2, "usage", 5);
@@ -202,7 +202,9 @@ int main(int a, char **b)
 	}
 	checkmakros();
 	fd = ft_read_file(b[1]);
-	readfile(fd);
+	ft_bzero(&all, sizeof(all));
+	all.fd = fd;
+	readfile(&all);
 	close(fd);
 	return (0);
 }
