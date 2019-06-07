@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/05 18:19:55 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/07 22:05:42 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,29 @@
 
 # include "op.h"
 
+typedef enum	e_er_type
+{
+	Lexical,
+	Syntactic,
+	Semantic
+}				t_er_type;
+
+typedef enum	e_case_type
+{
+	CMD_size_exceeded,
+	Wrong_argument,
+	Bad_CMD_declaration
+}				t_case_type;
+
+typedef struct	s_error
+{
+	t_er_type		type;
+	t_case_type		reason;
+	char			*line;
+	int				st;
+	int				i;
+	struct s_error	*next;
+}				t_error;
 
 /*
  * str имя метки, при следующем заходе значение меняется на распознанное число
@@ -50,6 +73,7 @@ typedef struct			s_all
 	unsigned int	prog_size;
 	t_list			*parsing;
 	t_tokens		*temp;
+	t_error			*errors;
 }						t_all;
 
 /*
@@ -60,11 +84,12 @@ t_tokens	*ft_newtokens(t_all *all, unsigned char tp);
 void		ft_tokenspush(t_tokens **alst, t_tokens *new);
 void		ft_tokensadd(t_tokens **alst, t_tokens *new);
 
-void		ft_error(t_all *all, int er);
+void		ft_error(t_all *all, t_er_type type, t_case_type reason);
 int			last_check(t_all *all);
 int			checkform(t_all *all);
 void		parseng(t_all *all);
 void		quick_pass(t_all *all);
 t_op		operations(t_all *all);
+
 
 #endif

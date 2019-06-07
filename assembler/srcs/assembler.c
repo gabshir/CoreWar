@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/07 17:43:18 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/07 22:01:40 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,7 @@ int		last_check(t_all *all)
 		else if (all->line[all->i] == c || all->line[all->i] == ac)
 			break ;
 		else
-			{
-				free(all->line);
-				all->line = NULL;
-				return (1);
-			}
-		++all->st;
+			return (1);
 	}
 	free(all->line);
 	all->line = NULL;
@@ -81,7 +76,7 @@ void	checkname(t_all *all, int f)
 	i = 0;
 	length = f == 0 ? PROG_NAME_LENGTH : COMMENT_LENGTH;
 	quick_pass(all);
-	all->line[all->i] && all->line[all->i]  == '"' ? ++all->i : ft_error(all, 1);
+	all->line[all->i] && all->line[all->i]  == '"' ? ++all->i : ft_error(all, Syntactic, Wrong_argument);
 	while(i < length && all->line[all->i] != '"')
 	{
 		while (!all->line[all->i])
@@ -104,8 +99,8 @@ void	checkname(t_all *all, int f)
 		++i;
 		++all->i;
 	}
-	i == length && all->line[all->i] != '"' ? ft_error(all, 1) : ++all->i;
-	last_check(all) ? ft_error(all, 1) : 0;
+	i == length && all->line[all->i] != '"' ? ft_error(all, Semantic, CMD_size_exceeded) : ++all->i;
+	last_check(all) ? ft_error(all, Syntactic, Wrong_argument) : 0;
 }
 
 int cheak_name_and_comment(t_all *all, int f)
@@ -135,47 +130,50 @@ int cheak_name_and_comment(t_all *all, int f)
 
 void	readfile(t_all *all)
 {
-	char		str[2];
+	char		flags[2];
 
-	ft_bzero(&str, 2);
+	ft_bzero(&flags, 2);
 	all->magic = COREWAR_EXEC_MAGIC;
-	while(!str[0] || !str[1])
+	while(!flags[0] || !flags[1])
 	{
 		checkform(all);
-		!all->line ? ft_error(all, 0) : 0;
-		if (cheak_name_and_comment(all, 0))
+		!all->line ? ft_error(all, Semantic, Bad_CMD_declaration) : 0;
+		if (cheak_name_and_comment(all, 0) && !flags[0])
 		{
-			str[0] = 1;
+			flags[0] = 1;
 			checkname(all, 0);
 		}
-		else if (cheak_name_and_comment(all, 1))
+		else if (cheak_name_and_comment(all, 1) && !flags[1])
 		{
-			str[1] = 1;
+			flags[1] = 1;
 			checkname(all, 1);
 		}
 		else
-			ft_error(all, 1);
+		{
+			ft_error(all, Semantic, Bad_CMD_declaration);
+			break ;
+		}
 	}
-	ft_printf("%s\n", all->prog_name);
-	ft_printf("%s\n", all->comment);
+	// ft_printf("%s\n", all->prog_name);
+	// ft_printf("%s\n", all->comment);
 }
 
-void	checkmakros(void)
-{
-	NAME_CMD_STRING <= 0 || PROG_NAME_LENGTH <= 0 ||
-	COMMENT_LENGTH <= 0 || !COREWAR_EXEC_MAGIC ||
-	!COMMENT_CMD_STRING || !ALT_COMMENT_CHAR  || !LABEL_CHAR ||
-	!DIRECT_CHAR || !SEPARATOR_CHAR || !LABEL_CHARS || REG_NUMBER <= 0 ||
-	CYCLE_TO_DIE <= 0 || CYCLE_DELTA <= 0 || NBR_LIVE <= 0 || MAX_CHECKS <= 0
-	|| IND_SIZE <= 0  || REG_SIZE <= 0 || !DIR_SIZE || REG_CODE <= 0 ||
-	DIR_CODE <= 0 || IND_CODE <= 0 || MAX_ARGS_NUMBER <= 0 || MAX_PLAYERS <= 0
-	|| MEM_SIZE <= 0 || T_REG <= 0 || T_DIR <= 0 || T_IND <= 0 || T_LAB <= 0?
-	ft_error(NULL, 1) : 0;
-}
+// void	checkmakros(void)
+// {
+// 	NAME_CMD_STRING <= 0 || PROG_NAME_LENGTH <= 0 ||
+// 	COMMENT_LENGTH <= 0 || !COREWAR_EXEC_MAGIC ||
+// 	!COMMENT_CMD_STRING || !ALT_COMMENT_CHAR  || !LABEL_CHAR ||
+// 	!DIRECT_CHAR || !SEPARATOR_CHAR || !LABEL_CHARS || REG_NUMBER <= 0 ||
+// 	CYCLE_TO_DIE <= 0 || CYCLE_DELTA <= 0 || NBR_LIVE <= 0 || MAX_CHECKS <= 0
+// 	|| IND_SIZE <= 0  || REG_SIZE <= 0 || !DIR_SIZE || REG_CODE <= 0 ||
+// 	DIR_CODE <= 0 || IND_CODE <= 0 || MAX_ARGS_NUMBER <= 0 || MAX_PLAYERS <= 0
+// 	|| MEM_SIZE <= 0 || T_REG <= 0 || T_DIR <= 0 || T_IND <= 0 || T_LAB <= 0?
+// 	ft_error(NULL, 1) : 0;
+// }
 
 int main(int a, char **b)
 {
-	int fd;
+	// int fd;
 	t_all	all;
 	t_tokens *read;
 
@@ -184,10 +182,10 @@ int main(int a, char **b)
 		write(2, "usage", 5);
 		exit(1);
 	}
-	checkmakros();
-	fd = ft_read_file(b[1]);
+	// checkmakros();
 	ft_bzero(&all, sizeof(all));
-	all.fd = fd;
+	all.fd = ft_read_file(b[1]);
+	// all.fd = fd;
 	readfile(&all);
 	parseng(&all);
 	while(all.parsing)
@@ -201,6 +199,6 @@ int main(int a, char **b)
 		ft_printf("\n");
 		all.parsing = all.parsing->next;
 	}
-	close(fd);
+	close(all.fd);
 	return (0);
 }

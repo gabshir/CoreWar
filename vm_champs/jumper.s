@@ -10,7 +10,7 @@ debut:	ld %0,r7
 	zjmp %:suite
 
 goboucle0:	live %66
-		ldi %-5,r3,r1
+		ldi %-5, r3,r1
 		sti r1,%-173,r3
 		add r3,r4,r3
 		xor r5,r3,r6
@@ -20,7 +20,7 @@ goboucle0:	live %66
 finboucle0:	xor r3,r3,r3
 		zjmp %-207
 
-buff:	st r1,r1	
+buff:	st r1, r1	
 		
 suite:	sti r1,%:livel,%1
 livel:	live %66

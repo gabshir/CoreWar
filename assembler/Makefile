@@ -6,11 +6,11 @@
 #    By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/28 19:06:18 by jwillem-          #+#    #+#              #
-#    Updated: 2019/06/04 15:18:58 by gabshire         ###   ########.fr        #
+#    Updated: 2019/06/07 18:55:31 by jwillem-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = asm
+NAME = ../asm
 
 CC = gcc
 FLAGS = -Wall -Wextra -Werror -g
@@ -18,7 +18,7 @@ FLAGS = -Wall -Wextra -Werror -g
 SRCDIR = srcs/
 OBJDIR = obj/
 
-FILES = assembler	error	op
+FILES = assembler	error	op	parseng		tokens
 OBJ = $(addprefix $(OBJDIR),$(addsuffix .o,$(FILES)))
 
 LIBFT = ../libft/libftprintf.a
