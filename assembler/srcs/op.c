@@ -6,11 +6,11 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/30 20:30:42 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/07 17:38:30 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "op.h"
+#include "asm.h"
 
 t_op    op_tab[17] =
 {
@@ -38,3 +38,36 @@ t_op    op_tab[17] =
 	{"aff", 1, {T_REG}, 16, 2, "aff", 1, 0},
 	{{0}, 0, {0}, 0, 0, {0}, 0, 0}
 };
+
+t_op		operations(t_all *all)
+{
+	char		*str;
+	unsigned	s;
+	unsigned	j;
+	unsigned	k;
+	t_op		v;
+
+	k = all->i;
+	s = 0;
+	ft_bzero(&v, sizeof(v));
+	while(s < 17)
+	{
+		all->i = k;
+		j = 0;
+		str = (char *)op_tab[s].cmd;
+		while (all->line[all->i] && str[j] && all->line[all->i] == str[j])
+		{
+			++all->i;
+			++j;
+		}
+		if (!str[j] && s < 16)
+			v = op_tab[s];
+		++s;
+	}
+	if (v.cmd[0])
+	{
+		all->line[all->i + ft_strlen((char *)v.cmd)] != ' ' &&
+		all->line[all->i + ft_strlen((char *)v.cmd)] != '\t'? ft_bzero(&v, sizeof(v)) : 0;
+	}
+	return (v);
+}

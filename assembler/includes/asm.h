@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/05/31 14:46:33 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/05 18:19:55 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,60 +15,20 @@
 
 # include "op.h"
 
-/*
-* LABEL - метка
-* OPERATION - операция
-* DIRECT - прямой аргумент
-* DIRECT_LABEL прямой аргумент - метка
-* INDIRECT - относительный аргамент
-* INDIRECT_LABEL - относительная метка
-* REGISTER - регистор
-* SEPARATOR - разделитель
-*/
-
-typedef enum
-{
-    LABEL,
-    OPERATION,
-    DIRECT,
-    DIRECT_LABEL,
-    INDIRECT,
-    INDIRECT_LABEL,
-    REGISTER,
-    SEPARATOR
-}   t_type;
 
 /*
-* content название токена
-* st - строка на которой находится токен
-* i - индекс внутри строки
-* t - тип токена
-* next - следующий токен в строке
-*/
+ * str имя метки, при следующем заходе значение меняется на распознанное число
+ */
 
-typedef struct		s_tokens
+typedef struct			s_tokens
 {
-	char			*content;
-	unsigned int	t;
-	unsigned int	st;
-	unsigned int	i;
-	struct s_tokens	*next;
-}					t_tokens;
+	char 				*str;
+	unsigned int		st;
+	unsigned int		i;
+	unsigned char		tp;
+	struct 	s_tokens *next;
+}						t_tokens;
 
-/*
-* st - строка на которой находится токен
-* i - индекс внутри строки
-* tokens - токены которые находятся внутри строки
-* next - следующая строка с токенами
-*/
-
-typedef struct			s_parseng
-{
-	unsigned int	st;
-	unsigned int	i;
-	t_tokens		*tokens;
-	struct s_parseng	*next;
-}						t_parseng;
 
 /*
 * fd - файловый дискриптор
@@ -86,9 +46,25 @@ typedef struct			s_all
 	char			*line;
 	unsigned int	magic;
 	char			prog_name[PROG_NAME_LENGTH + 1];
-	unsigned int	prog_size;
 	char			comment[COMMENT_LENGTH + 1];
-	t_parseng		*parseng;
+	unsigned int	prog_size;
+	t_list			*parsing;
+	t_tokens		*temp;
 }						t_all;
+
+/*
+ * работа с листами токинов
+ */
+
+t_tokens	*ft_newtokens(t_all *all, unsigned char tp);
+void		ft_tokenspush(t_tokens **alst, t_tokens *new);
+void		ft_tokensadd(t_tokens **alst, t_tokens *new);
+
+void		ft_error(t_all *all, int er);
+int			last_check(t_all *all);
+int			checkform(t_all *all);
+void		parseng(t_all *all);
+void		quick_pass(t_all *all);
+t_op		operations(t_all *all);
 
 #endif

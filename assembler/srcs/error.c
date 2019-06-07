@@ -6,16 +6,17 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/30 20:30:42 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/04 15:18:58 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include "op.h"
+#include "asm.h"
 
-void	ft_error(int er)
+void	ft_error(t_all *all, int er)
 {
+	!all ?  ft_printf("error makros \n") : 0;
 	er == 0 ? ft_printf("clean file\n") : 0;
-	er == 1 ? ft_printf("syntax error\n") : 0;
+	er == 1 ? ft_printf("stroka %d stolbec %d syntax error\n", all->st, all->i) : 0;
+	ft_printf("%s\n", all->line);
 	exit(1);
 }

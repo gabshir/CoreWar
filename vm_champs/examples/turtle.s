@@ -1,4 +1,4 @@
-.name 		"turtle"
+.name"turtle"
 .comment	"TURTLE FFS U LAMA"
 
 entry:

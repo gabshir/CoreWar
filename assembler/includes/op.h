@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/30 20:30:43 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/05 12:43:50 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,17 @@ typedef char	t_arg_type;
 # define COMMENT_LENGTH			(2048)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
+/*
+ * cmd - имя
+ * arg_g кол арг
+ * arg_type массив аргументов
+ * opcode код операции
+ * cycles циклы до исполнения
+ * descrip короткое описание
+ * a_typecode - код типов аргументов
+ * dir_size размер т-дир
+ */
+
 typedef struct	s_op
 {
 	unsigned char	cmd[6];
@@ -83,7 +94,5 @@ typedef struct	s_op
 	unsigned char	a_typecode;
 	unsigned char	dir_size;
 }				t_op;
-
-void	ft_error(int er);
 
 #endif
