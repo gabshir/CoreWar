@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/05/31 15:53:20 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/07 17:43:18 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,14 @@ void	quick_pass(t_all *all)
 		++all->i;
 }
 
-void    cheackmet(char *str)
+int		checkform(t_all *all)
 {
-	unsigned i;
-	unsigned j;
+	int t;
 
-	i = 0;
-	while(str[i])
-	{
-		j = 0;
-		while(LABEL_CHARS[j])
-		{
-			if (str[i] != LABEL_CHARS[j])
-				++j;
-			else
-				break;
-		}
-		!LABEL_CHARS[j] ? ft_error(1) : 0;
-		++i;
-	}
-}
-
-void	checkform(t_all *all)
-{
-	while (get_next_line(all->fd, &all->line))
+	while ((t = get_next_line(all->fd, &all->line)))
 	{
 		all->i = 0;
+		++all->st;
 		while (all->line[all->i])
 		{
 			if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR)
@@ -56,12 +38,12 @@ void	checkform(t_all *all)
 			if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
 				++all->i;
 			else
-				return ;
-			++all->st;
+				return (t);
 		}
 		free(all->line);
 		all->line = NULL;
 	}
+	return (t);
 }
 
 int		last_check(t_all *all)
@@ -88,7 +70,6 @@ int		last_check(t_all *all)
 	free(all->line);
 	all->line = NULL;
 	all->i = 0;
-	++all->st;
 	return (0);
 }
 
@@ -100,20 +81,21 @@ void	checkname(t_all *all, int f)
 	i = 0;
 	length = f == 0 ? PROG_NAME_LENGTH : COMMENT_LENGTH;
 	quick_pass(all);
-	all->line[all->i] && all->line[all->i]  == '"' ? ++all->i : ft_error(1);
+	all->line[all->i] && all->line[all->i]  == '"' ? ++all->i : ft_error(all, 1);
 	while(i < length && all->line[all->i] != '"')
 	{
 		while (!all->line[all->i])
 		{
 			f == 0 ? all->prog_name[i] = '\n' : 0;
 			f == 1 ? all->comment[i] = '\n' : 0;
-			++all->st;
 			free(all->line);
 			all->line = NULL;
 			all->i = 0;
 			++i;
 			if (!get_next_line(all->fd, &all->line))
 				break ;
+			else
+				++all->st;
 		}
 		if (all->line[all->i] == '"')
 			break ;
@@ -122,8 +104,8 @@ void	checkname(t_all *all, int f)
 		++i;
 		++all->i;
 	}
-	i == length && all->line[all->i] != '"' ? ft_error(1) : ++all->i;
-	last_check(all) ? ft_error(1) : 0;
+	i == length && all->line[all->i] != '"' ? ft_error(all, 1) : ++all->i;
+	last_check(all) ? ft_error(all, 1) : 0;
 }
 
 int cheak_name_and_comment(t_all *all, int f)
@@ -160,7 +142,7 @@ void	readfile(t_all *all)
 	while(!str[0] || !str[1])
 	{
 		checkform(all);
-		!all->line ? ft_error(0) : 0;
+		!all->line ? ft_error(all, 0) : 0;
 		if (cheak_name_and_comment(all, 0))
 		{
 			str[0] = 1;
@@ -172,7 +154,7 @@ void	readfile(t_all *all)
 			checkname(all, 1);
 		}
 		else
-			ft_error(1);
+			ft_error(all, 1);
 	}
 	ft_printf("%s\n", all->prog_name);
 	ft_printf("%s\n", all->comment);
@@ -188,13 +170,15 @@ void	checkmakros(void)
 	|| IND_SIZE <= 0  || REG_SIZE <= 0 || !DIR_SIZE || REG_CODE <= 0 ||
 	DIR_CODE <= 0 || IND_CODE <= 0 || MAX_ARGS_NUMBER <= 0 || MAX_PLAYERS <= 0
 	|| MEM_SIZE <= 0 || T_REG <= 0 || T_DIR <= 0 || T_IND <= 0 || T_LAB <= 0?
-	ft_error(1) : 0;
+	ft_error(NULL, 1) : 0;
 }
 
 int main(int a, char **b)
 {
 	int fd;
 	t_all	all;
+	t_tokens *read;
+
 	if (a != 2)
 	{
 		write(2, "usage", 5);
@@ -205,6 +189,18 @@ int main(int a, char **b)
 	ft_bzero(&all, sizeof(all));
 	all.fd = fd;
 	readfile(&all);
+	parseng(&all);
+	while(all.parsing)
+	{
+		read = all.parsing->content;
+		while(read)
+		{
+			ft_printf("%s ", read->str);
+			read = read->next;
+		}
+		ft_printf("\n");
+		all.parsing = all.parsing->next;
+	}
 	close(fd);
 	return (0);
 }
