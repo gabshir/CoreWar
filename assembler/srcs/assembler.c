@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/07 22:01:40 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/08 01:47:26 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,8 @@ int main(int a, char **b)
 	// all.fd = fd;
 	readfile(&all);
 	parseng(&all);
+	if (all.errors)
+		print_errors(&all, b[1]);
 	while(all.parsing)
 	{
 		read = all.parsing->content;

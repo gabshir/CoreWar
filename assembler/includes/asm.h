@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/07 22:05:42 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/08 03:04:16 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define ASM_H
 
 # include "op.h"
+
+# define SECURE_MALLOC(a)	!(a) && memory_error()
 
 typedef enum	e_er_type
 {
@@ -26,7 +28,13 @@ typedef enum	e_case_type
 {
 	CMD_size_exceeded,
 	Wrong_argument,
-	Bad_CMD_declaration
+	Odd_argument,
+	Bad_CMD_declaration,
+	Incorrect_int,
+	No_colon_before,
+	No_colon_after,
+	No_comma,
+	Uknown_instr
 }				t_case_type;
 
 typedef struct	s_error
@@ -91,5 +99,7 @@ void		parseng(t_all *all);
 void		quick_pass(t_all *all);
 t_op		operations(t_all *all);
 
+void		print_errors(t_all *all, char *filename);
+int			memory_error(void);
 
 #endif
