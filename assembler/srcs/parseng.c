@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/08 04:54:14 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/08 07:00:56 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ void    checkmet(t_all *all, int f, int f1)
 	i = f1 ? all->i - 1 : all->i;
 	tp = !f1 ? LABEL : DIRECT;
 	f && all->line[all->i] != LABEL_CHAR ? ft_error(all, Syntactic, No_colon_before) : 0;
-	while(all->line[all->i] && all->line[all->i] != ' '
-	&& all->line[all->i] != '\t' && all->line[all->i] != SEPARATOR_CHAR
-	&& all->line[all->i] != COMMENT_CHAR && all->line[all->i] != ALT_COMMENT_CHAR)
+	while(all->line[all->i])
 	{
 		j = 0;
 		while(LABEL_CHARS[j])
@@ -73,6 +71,11 @@ void    checkmet(t_all *all, int f, int f1)
 				break;
 		}
 		!LABEL_CHARS[j] && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, Lexical, Wrong_lchar) : 0;
+		if (!LABEL_CHARS[j] && all->line[all->i] == LABEL_CHAR  && !f)
+		{
+			++all->i;
+			break;
+		}
 		++all->i;
 	}
 	token = ft_newtokens(all, tp);
@@ -96,7 +99,7 @@ int 	ft_reg(t_all *all, int *k)
 		ft_error(all, Lexical, Incorrect_int);
 	--k[0];
 	token = ft_newtokens(all, REGISTER);
-	token->str = ft_strsub(all->line, i - 1, all->i - i + 1);
+	token->str = ft_strsub(all->line, i, all->i - i);
 	if (k[0] > 0)
 	{
 		quick_pass(all);
@@ -157,14 +160,14 @@ int ft_idir(t_all *all, int *k)
 	if (i - all->i == 0)
 		return (0);
 	--k[0];
+	token = ft_newtokens(all, INDIRECT);
+	token->str = ft_strsub(all->line, i, all->i - i);
 	if (k[0] > 0)
 	{
 		quick_pass(all);
 		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
 		quick_pass(all);
 	}
-	token = ft_newtokens(all, INDIRECT);
-	token->str = ft_strsub(all->line, i - 1, all->i - i - 1);
 	ft_tokenspush(&all->temp, token);
 	return (1);
 }

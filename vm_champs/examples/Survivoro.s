@@ -10,7 +10,7 @@ f1:	ld	%5, r2
 
 j1:
 
-run:	xor	11, r1, r1
+run:	xor	r1, r1, r1
 l1:	st	r2, 1
 	live	%1
 	zjmp	%:l1

@@ -190,7 +190,6 @@ int main(int a, char **b)
 	// checkmakros();
 	ft_bzero(&all, sizeof(all));
 	all.fd = ft_read_file(b[1]);
-	// all.fd = fd;
 	readfile(&all);
 	parseng(&all);
 	if (all.errors)
