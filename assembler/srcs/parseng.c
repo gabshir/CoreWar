@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/08 00:51:08 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/08 04:54:14 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void    checkmet(t_all *all, int f, int f1)
 			else
 				break;
 		}
-		!LABEL_CHARS[j] && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, Syntactic, No_colon_after) : 0;
+		!LABEL_CHARS[j] && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, Lexical, Wrong_lchar) : 0;
 		++all->i;
 	}
 	token = ft_newtokens(all, tp);

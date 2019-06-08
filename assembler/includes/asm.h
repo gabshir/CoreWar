@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/07 18:41:53 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/08 04:54:27 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef enum	e_case_type
 {
 	CMD_size_exceeded,
 	Wrong_argument,
+	Wrong_lchar,
 	Odd_argument,
 	Bad_CMD_declaration,
 	Incorrect_int,
