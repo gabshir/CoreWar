@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/08 01:47:26 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/07 19:37:52 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,12 @@ int		checkform(t_all *all)
 			else
 				return (t);
 		}
-		free(all->line);
+		if (all->pred_line)
+		{
+			free(all->pred_line);
+			all->pred_line = NULL;
+		}
+		all->pred_line = all->line;
 		all->line = NULL;
 	}
 	return (t);

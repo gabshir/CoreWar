@@ -12,7 +12,7 @@
 
 #include "asm.h"
 
-t_tokens	*ft_newtokens(t_all *all, unsigned char tp)
+t_tokens	*ft_newtokens(t_all *all, t_type tp)
 {
 	t_tokens	*new;
 

@@ -104,6 +104,8 @@ static char	*get_reason_str(t_case_type reason)
 		reas = "No comma (',') found between arguments";
 	else if (reason == Uknown_instr)
 		reas = "Uknown instruction";
+	else if (reason == No_last_line)
+		reas = "No last empty line found";
 	return (reas);
 }
 
