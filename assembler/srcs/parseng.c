@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parseng.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
 /*   Updated: 2019/06/08 00:51:08 by gabshire         ###   ########.fr       */
@@ -45,7 +45,7 @@ int		miniatoi(t_all *all)
 		++i;
 		l = 1;
 	}
-	!l && f ? ft_error(all, 1) : 0;
+	!l && f ? ft_error(all, Lexical, Incorrect_int) : 0;
 	all->i = i;
 	return (s);
 }
@@ -59,7 +59,7 @@ void    checkmet(t_all *all, int f, int f1)
 
 	i = f1 ? all->i - 1 : all->i;
 	tp = !f1 ? LABEL : DIRECT;
-	f && all->line[all->i] != LABEL_CHAR ? ft_error(all, 1) : 0;
+	f && all->line[all->i] != LABEL_CHAR ? ft_error(all, Syntactic, No_colon_before) : 0;
 	while(all->line[all->i] && all->line[all->i] != ' '
 	&& all->line[all->i] != '\t' && all->line[all->i] != SEPARATOR_CHAR
 	&& all->line[all->i] != COMMENT_CHAR && all->line[all->i] != ALT_COMMENT_CHAR)
@@ -72,7 +72,7 @@ void    checkmet(t_all *all, int f, int f1)
 			else
 				break;
 		}
-		!LABEL_CHARS[j] && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, 1) : 0;
+		!LABEL_CHARS[j] && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, Syntactic, No_colon_after) : 0;
 		++all->i;
 	}
 	token = ft_newtokens(all, tp);
@@ -93,14 +93,14 @@ int 	ft_reg(t_all *all, int *k)
 	i = all->i;
 	s = miniatoi(all);
 	if (all->i - i > 2 || i - all->i == 0 || s == 0)
-		ft_error(all, 1);
+		ft_error(all, Lexical, Incorrect_int);
 	--k[0];
 	token = ft_newtokens(all, REGISTER);
 	token->str = ft_strsub(all->line, i - 1, all->i - i + 1);
 	if (k[0] > 0)
 	{
 		quick_pass(all);
-		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, 1) : ++all->i;
+		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
 		quick_pass(all);
 	}
 	ft_tokenspush(&all->temp, token);
@@ -134,7 +134,7 @@ int ft_dir(t_all *all, int *k)
 	if (k[0] > 0)
 	{
 		quick_pass(all);
-		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, 1) : ++all->i;
+		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
 		quick_pass(all);
 	}
 	ft_tokenspush(&all->temp, token);
@@ -160,7 +160,7 @@ int ft_idir(t_all *all, int *k)
 	if (k[0] > 0)
 	{
 		quick_pass(all);
-		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, 1) : ++all->i;
+		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
 		quick_pass(all);
 	}
 	token = ft_newtokens(all, INDIRECT);
@@ -196,11 +196,11 @@ void	ft_parseng(t_all *all, t_op a)
 			if (v[2] == 1 && !f)
 				f = ft_reg(all, &k);
 			free(v);
-			!f ? ft_error(all, 1) : 0;
+			!f ? ft_error(all, Syntactic, Wrong_argument) : 0;
 			++j;
 		}
 	}
-	last_check(all) ? ft_error(all, 1) : 0;
+	last_check(all) ? ft_error(all, Syntactic, Odd_argument) : 0;
 }
 
 void tokens(t_all *all)
@@ -228,7 +228,7 @@ void tokens(t_all *all)
 		token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
 		ft_tokenspush(&all->temp, token);
 	}
-	!a.cmd[0] ? ft_error(all, 1) : ft_parseng(all, a);
+	!a.cmd[0] ? ft_error(all, Syntactic, Uknown_instr) : ft_parseng(all, a);
 }
 
 void	parseng(t_all *all)
@@ -246,5 +246,5 @@ void	parseng(t_all *all)
 		}
 	}
 	if (!all->parsing || all->pred_line[0] != '\0')
-		ft_error(all, 1);
+		ft_error(all, Syntactic, No_last_line);
 }
