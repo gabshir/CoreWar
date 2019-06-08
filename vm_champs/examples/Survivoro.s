@@ -5,7 +5,7 @@
 	fork	%1
 	zjmp	%:j1
 
-f1:	ld	%5, r2
+f1	ld	%5, r2
 	zjmp	%:run
 
 j1:

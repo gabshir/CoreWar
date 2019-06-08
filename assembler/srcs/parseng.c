@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/08 04:54:14 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/08 05:59:56 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ void    checkmet(t_all *all, int f, int f1)
 	i = f1 ? all->i - 1 : all->i;
 	tp = !f1 ? LABEL : DIRECT;
 	f && all->line[all->i] != LABEL_CHAR ? ft_error(all, Syntactic, No_colon_before) : 0;
-	while(all->line[all->i] && all->line[all->i] != ' '
-	&& all->line[all->i] != '\t' && all->line[all->i] != SEPARATOR_CHAR
-	&& all->line[all->i] != COMMENT_CHAR && all->line[all->i] != ALT_COMMENT_CHAR)
+	while(all->line[all->i])
 	{
 		j = 0;
 		while(LABEL_CHARS[j])
@@ -73,6 +71,11 @@ void    checkmet(t_all *all, int f, int f1)
 				break;
 		}
 		!LABEL_CHARS[j] && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, Lexical, Wrong_lchar) : 0;
+		if (!LABEL_CHARS[j] && all->line[all->i] == LABEL_CHAR  && !f)
+		{
+			++all->i;
+			break;
+		}
 		++all->i;
 	}
 	token = ft_newtokens(all, tp);
