@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/08 15:04:17 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/09 21:23:03 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct			s_tokens
 typedef struct			s_all
 {
 	int				fd;
+	char			**split;
 	unsigned int	i;
 	unsigned int	st;
 	char			*line;
@@ -137,6 +138,7 @@ t_op		operations(t_all *all, int *i);
 void		print_errors(t_all *all, char *filename);
 int			memory_error(void);
 
-void		assembler(t_all *all);
+// void		assembler(t_all *all);
 int			ft_atoi_base(const char *str, int base);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/08 12:42:41 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/09 21:24:04 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,20 @@ void	readfile(t_all *all)
 // 	ft_error(NULL, 1) : 0;
 // }
 
+static void	copy_text(t_all *all)
+{
+	char	*buffer;
+	char	*champ;
+
+	SECURE_MALLOC(buffer = ft_strnew(MEM_SIZE));
+	champ = NULL;
+	while (read(all->fd, buffer, MEM_SIZE) > 0)
+		champ = ft_strjoin_free(champ, buffer, 3);
+	if (champ[ft_strlen(champ) - 1] != '\n')
+		ft_error(all, Syntactic, No_last_line);
+	all->split = ft_strsplit(champ, '\n');
+}
+
 int main(int a, char **b)
 {
 	// int fd;
@@ -197,6 +211,7 @@ int main(int a, char **b)
 	// checkmakros();
 	ft_bzero(&all, sizeof(all));
 	all.fd = ft_read_file(b[1]);
+	copy_text(&all);
 	readfile(&all);
 	parseng(&all);
 	if (all.errors)
@@ -212,12 +227,12 @@ int main(int a, char **b)
 		ft_printf("\n");
 		all.parsing = all.parsing->next;
 	}
-	assembler(&all);
-	while(all.source)
-	{
-		ft_printf("%s\n", all.source->content);
-		all.source = all.source->next;
-	}
+	// assembler(&all);
+	// while(all.source)
+	// {
+	// 	ft_printf("%s\n", all.source->content);
+	// 	all.source = all.source->next;
+	// }
 	close(all.fd);
 	return (0);
 }
