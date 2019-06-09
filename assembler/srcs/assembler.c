@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/07 19:37:52 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/09 21:56:45 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@ int		checkform(t_all *all)
 	{
 		all->i = 0;
 		++all->st;
+		if (all->pred_line)
+		{
+			free(all->pred_line);
+			all->pred_line = NULL;
+		}
+		all->pred_line = ft_strdup(all->line);
 		while (all->line[all->i])
 		{
 			if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR)
@@ -40,24 +46,41 @@ int		checkform(t_all *all)
 			else
 				return (t);
 		}
-		if (all->pred_line)
+		if (all->line)
 		{
-			free(all->pred_line);
-			all->pred_line = NULL;
+			free(all->line);
+			all->line = NULL;
 		}
-		all->pred_line = all->line;
-		all->line = NULL;
 	}
+	//free(all->line);
+	all->line = all->pred_line;
 	return (t);
 }
 
-int		last_check(t_all *all)
+int		checkform(t_all *all)
+{	
+	while ((all->line = &all->split[all->st]))
+	{
+		++all->st;
+		all->i = 0;
+		if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR)
+			continue ;
+		if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
+			all->i++;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+int		last_check(t_all *all, int f)
 {
 	char	c;
 	char	ac;
 
 	c = COMMENT_CHAR;
 	ac = ALT_COMMENT_CHAR;
+	f ? all->line = all->pred_line : 0;
 	while (all->line[all->i])
 	{
 		if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
@@ -105,7 +128,7 @@ void	checkname(t_all *all, int f)
 		++all->i;
 	}
 	i == length && all->line[all->i] != '"' ? ft_error(all, Semantic, CMD_size_exceeded) : ++all->i;
-	last_check(all) ? ft_error(all, Syntactic, Wrong_argument) : 0;
+	last_check(all, 0) ? ft_error(all, Syntactic, Wrong_argument) : 0;
 }
 
 int cheak_name_and_comment(t_all *all, int f)
@@ -176,6 +199,20 @@ void	readfile(t_all *all)
 // 	ft_error(NULL, 1) : 0;
 // }
 
+static void	copy_text(t_all *all)
+{
+	char	*buffer;
+	char	*champ;
+
+	SECURE_MALLOC(buffer = ft_strnew(MEM_SIZE));
+	champ = NULL;
+	while (read(all->fd, buffer, MEM_SIZE) > 0)
+		champ = ft_strjoin_free(champ, buffer, 3);
+	if (champ[ft_strlen(champ) - 1] != '\n')
+		ft_error(all, Syntactic, No_last_line);
+	all->split = ft_strsplit(champ, '\n');
+}
+
 int main(int a, char **b)
 {
 	// int fd;
@@ -190,7 +227,7 @@ int main(int a, char **b)
 	// checkmakros();
 	ft_bzero(&all, sizeof(all));
 	all.fd = ft_read_file(b[1]);
-	// all.fd = fd;
+	copy_text(&all);
 	readfile(&all);
 	parseng(&all);
 	if (all.errors)
@@ -206,6 +243,12 @@ int main(int a, char **b)
 		ft_printf("\n");
 		all.parsing = all.parsing->next;
 	}
+	// assembler(&all);
+	// while(all.source)
+	// {
+	// 	ft_printf("%s\n", all.source->content);
+	// 	all.source = all.source->next;
+	// }
 	close(all.fd);
 	return (0);
 }
