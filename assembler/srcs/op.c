@@ -39,7 +39,7 @@ t_op    op_tab[17] =
 	{{0}, 0, {0}, 0, 0, {0}, 0, 0}
 };
 
-t_op		operations(t_all *all)
+t_op		operations(t_all *all, int *i)
 {
 	char		*str;
 	unsigned	s;
@@ -61,13 +61,20 @@ t_op		operations(t_all *all)
 			++j;
 		}
 		if (!str[j] && s < 16)
+		{
 			v = op_tab[s];
+			i[0] = s;
+		}
 		++s;
 	}
 	if (v.cmd[0])
 	{
-		all->line[all->i + ft_strlen((char *)v.cmd)] != ' ' &&
-		all->line[all->i + ft_strlen((char *)v.cmd)] != '\t'? ft_bzero(&v, sizeof(v)) : 0;
+		if (all->line[all->i + ft_strlen((char *)v.cmd)] != ' ' &&
+		all->line[all->i + ft_strlen((char *)v.cmd)] != '\t')
+		{
+			ft_bzero(&v, sizeof(v));
+			i[0] = -1;
+		}
 	}
 	return (v);
 }

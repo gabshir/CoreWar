@@ -12,7 +12,7 @@
 
 #include "asm.h"
 
-t_tokens	*ft_newtokens(t_all *all, t_type tp)
+t_tokens	*ft_newtokens(t_all *all, t_type tp, int o)
 {
 	t_tokens	*new;
 
@@ -23,6 +23,7 @@ t_tokens	*ft_newtokens(t_all *all, t_type tp)
 	new->st = all->st;
 	new->i = all->i;
 	new->tp = tp;
+	new->operation = o;
 	return (new);
 }
 
