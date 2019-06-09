@@ -6,7 +6,11 @@
 #    By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/28 19:06:18 by jwillem-          #+#    #+#              #
-#    Updated: 2019/06/09 22:12:00 by gabshire         ###   ########.fr        #
+#    Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr        #
+.fr        #
+=======
+#    Updated: 2019/06/09 22:08:44 by gabshire         ###   ########.fr        #
+>>>>>>> master
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +22,8 @@ FLAGS = -Wall -Wextra -Werror -g
 SRCDIR = srcs/
 OBJDIR = obj/
 
-FILES = assembler	error	op	parseng		tokens
+FILES = assembler	error	op	parseng		tokens	\
+	gnl_cw
 OBJ = $(addprefix $(OBJDIR),$(addsuffix .o,$(FILES)))
 
 LIBFT = ../libft/libftprintf.a

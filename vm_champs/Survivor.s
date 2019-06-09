@@ -6,7 +6,7 @@
 	zjmp	%:j1
 
 f1:	ld	%5, r2
-	zjmp	%run
+	zjmp	%:run
 
 j1:
 
