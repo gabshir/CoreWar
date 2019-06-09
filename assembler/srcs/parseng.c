@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/08 07:00:56 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/08 15:19:51 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,17 @@ void    checkmet(t_all *all, int f, int f1)
 		!LABEL_CHARS[j] && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, Lexical, Wrong_lchar) : 0;
 		if (!LABEL_CHARS[j] && all->line[all->i] == LABEL_CHAR  && !f)
 		{
-			++all->i;
+		   	++all->i;
+			break;
+		}
+		if (!LABEL_CHARS[j] && all->line[all->i] == SEPARATOR_CHAR  && f)
+		{
+	//		++all->i;
 			break;
 		}
 		++all->i;
 	}
-	token = ft_newtokens(all, tp);
+	token = ft_newtokens(all, tp, -1);
 	token->str = ft_strsub(all->line, i, all->i - i);
 	ft_tokenspush(&all->temp, token);
 }
@@ -98,7 +103,7 @@ int 	ft_reg(t_all *all, int *k)
 	if (all->i - i > 2 || i - all->i == 0 || s == 0)
 		ft_error(all, Lexical, Incorrect_int);
 	--k[0];
-	token = ft_newtokens(all, REGISTER);
+	token = ft_newtokens(all, REGISTER, -1);
 	token->str = ft_strsub(all->line, i, all->i - i);
 	if (k[0] > 0)
 	{
@@ -114,7 +119,7 @@ int ft_dir(t_all *all, int *k)
 {
 	char		c;
 	unsigned	i;
-	t_tokens *token;
+	t_tokens	*token;
 
 	c = DIRECT_CHAR;
 	quick_pass(all);
@@ -132,7 +137,7 @@ int ft_dir(t_all *all, int *k)
 	if (i - all->i == 0)
 		return (0);
 	--k[0];
-	token = ft_newtokens(all, DIRECT);
+	token = ft_newtokens(all, DIRECT, -1);
 	token->str = ft_strsub(all->line, i - 1, all->i - i + 1);
 	if (k[0] > 0)
 	{
@@ -160,7 +165,7 @@ int ft_idir(t_all *all, int *k)
 	if (i - all->i == 0)
 		return (0);
 	--k[0];
-	token = ft_newtokens(all, INDIRECT);
+	token = ft_newtokens(all, INDIRECT, -1);
 	token->str = ft_strsub(all->line, i, all->i - i);
 	if (k[0] > 0)
 	{
@@ -172,7 +177,7 @@ int ft_idir(t_all *all, int *k)
 	return (1);
 }
 
-void	ft_parseng(t_all *all, t_op a)
+void		ft_parseng(t_all *all, t_op a)
 {
 	char		*v;
 	unsigned	j;
@@ -203,19 +208,22 @@ void	ft_parseng(t_all *all, t_op a)
 			++j;
 		}
 	}
-	last_check(all) ? ft_error(all, Syntactic, Odd_argument) : 0;
+	last_check(all, 0) ? ft_error(all, Syntactic, Odd_argument) : 0;
 }
 
-void tokens(t_all *all)
+void			tokens(t_all *all)
 {
 	t_op		a;
 	t_tokens	*token;
+	int			i;
 
 	quick_pass(all);
-	a = operations(all);
+	i = -1;
+	a = operations(all, &i);
 	if (!a.cmd[0])
 	{
 		checkmet(all, 0, 0);
+		i = -1;
 		quick_pass(all);
 		if (!all->line[all->i])
 		{
@@ -223,11 +231,11 @@ void tokens(t_all *all)
 			all->temp = NULL;
 			return ;
 		}
-		a = operations(all);
+		a = operations(all, &i);
 	}
 	if (a.cmd[0])
 	{
-		token = ft_newtokens(all, INSTRUCTION);
+		token = ft_newtokens(all, INSTRUCTION, i);
 		token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
 		ft_tokenspush(&all->temp, token);
 	}
@@ -248,6 +256,7 @@ void	parseng(t_all *all)
 			all->line = NULL;
 		}
 	}
-	if (!all->parsing || all->pred_line[0] != '\0')
+	all->i = 0;
+	if (!all->parsing || last_check(all, 1))
 		ft_error(all, Syntactic, No_last_line);
 }

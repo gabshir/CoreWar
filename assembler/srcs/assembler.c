@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/07 19:37:52 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/08 12:42:41 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@ int		checkform(t_all *all)
 	{
 		all->i = 0;
 		++all->st;
+		if (all->pred_line)
+		{
+			free(all->pred_line);
+			all->pred_line = NULL;
+		}
+		all->pred_line = ft_strdup(all->line);
 		while (all->line[all->i])
 		{
 			if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR)
@@ -40,24 +46,25 @@ int		checkform(t_all *all)
 			else
 				return (t);
 		}
-		if (all->pred_line)
+		if (all->line)
 		{
-			free(all->pred_line);
-			all->pred_line = NULL;
+			free(all->line);
+			all->line = NULL;
 		}
-		all->pred_line = all->line;
-		all->line = NULL;
 	}
+	//free(all->line);
+	all->line = all->pred_line;
 	return (t);
 }
 
-int		last_check(t_all *all)
+int		last_check(t_all *all, int f)
 {
 	char	c;
 	char	ac;
 
 	c = COMMENT_CHAR;
 	ac = ALT_COMMENT_CHAR;
+	f ? all->line = all->pred_line : 0;
 	while (all->line[all->i])
 	{
 		if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
@@ -105,7 +112,7 @@ void	checkname(t_all *all, int f)
 		++all->i;
 	}
 	i == length && all->line[all->i] != '"' ? ft_error(all, Semantic, CMD_size_exceeded) : ++all->i;
-	last_check(all) ? ft_error(all, Syntactic, Wrong_argument) : 0;
+	last_check(all, 0) ? ft_error(all, Syntactic, Wrong_argument) : 0;
 }
 
 int cheak_name_and_comment(t_all *all, int f)
@@ -204,6 +211,12 @@ int main(int a, char **b)
 		}
 		ft_printf("\n");
 		all.parsing = all.parsing->next;
+	}
+	assembler(&all);
+	while(all.source)
+	{
+		ft_printf("%s\n", all.source->content);
+		all.source = all.source->next;
 	}
 	close(all.fd);
 	return (0);

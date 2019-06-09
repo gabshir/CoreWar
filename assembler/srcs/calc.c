@@ -6,43 +6,74 @@
 /*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/08 03:57:38 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/08 20:14:03 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-char	*byte_numbers(int c)
-{
-	int		k;
-	char	*str;
-	char	l;
+//char			*magik(unsigned int c)
+//{
+//	char		*v;
+//	unsigned	l;
+//
+//	v = ft_memalloc(5);
+//	l = 4;
+//	while (c)
+//	{
+//		v[--l] = c % 16 > 10 ? c % 16 + 'a' - 10 :  c % 16 - 10 + '0';
+//		c /= 16;
+//	}
+//	return (v);
+//}
 
-	c < 0 ? c = ~c : 0;
-	k = kol_sim(c, 16);
-	if (!(str = (char *)ft_memalloc(sizeof(char) * k + 1)))
-		return (NULL);
-	while (c)
+int 		transform(unsigned int a)
+{
+	char *temp;
+	unsigned l;
+	int r;
+
+	l = 2;
+	temp = ft_strnew(2);
+	while(a)
 	{
-		l = c % 16;
-		str[--k] = l > 9 ? c - 10 + 'a' : c + '0';
-		c /= 10;
+		temp[--l] = a % 16 < 10 ? a % 16 + '0' : a % 16 + 'a' - 10;
+		a /= 16;
 	}
-	return (str);
+	r = ft_atoi_base(temp, 16);
+	free(temp);
+	return (r);
 }
 
-char	*byte_string(char *s)
+char			*name_and_comment(char *str, int f)
 {
-	char	*str;
-	int 	i;
+	char	*v;
+	unsigned r;
+	unsigned	k;
 
-	str = ft_strnew(0);
-	i = 0;
-	while (s[i])
+	r = f == 0 ? PROG_NAME_LENGTH : COMMENT_LENGTH;
+	v = ft_memalloc(r);
+	k = 0;
+	while(*str)
 	{
-		str = ft_strjoin_free(str, byte_numbers(s[i]), 3);
-		++i;
+		v[k] = transform(*str);
+		++str;
+		++k;
 	}
-	return (str);
+	return (v);
 }
 
+void		assembler(t_all *all)
+{
+	t_list	*temp;
+
+//	temp = ft_lstnew(NULL, 0);
+//	temp->content = magik(all->magic);
+//	ft_lstpush(&all->source, temp);
+	char test[5];
+
+	write(1, test, 3);
+	temp = ft_lstnew(NULL, 0);
+	temp->content = name_and_comment(all->prog_name, 0);
+	ft_lstpush(&all->source, temp);
+}
