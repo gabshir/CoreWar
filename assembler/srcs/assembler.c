@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/09 21:24:04 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/09 21:56:45 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,22 @@ int		checkform(t_all *all)
 	//free(all->line);
 	all->line = all->pred_line;
 	return (t);
+}
+
+int		checkform(t_all *all)
+{	
+	while ((all->line = &all->split[all->st]))
+	{
+		++all->st;
+		all->i = 0;
+		if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR)
+			continue ;
+		if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
+			all->i++;
+		else
+			return (1);
+	}
+	return (0);
 }
 
 int		last_check(t_all *all, int f)
