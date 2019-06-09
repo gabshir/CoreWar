@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/09 21:23:03 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ typedef    enum    e_type
 	LABEL, // метка
 	INSTRUCTION, //инструкция
 	DIRECT, //директ
+	DIRLABEL,
 	INDIRECT, // индерект
+	INDIRLABEL,
 	REGISTER //регистр
 }                t_type;
 
@@ -89,7 +91,7 @@ typedef struct			s_tokens
 	unsigned int		i;
 	t_type				tp;
 	t_operation			operation;
-	unsigned char		razmer;
+	unsigned char		size;
 	struct 	s_tokens *next;
 }						t_tokens;
 
@@ -138,7 +140,6 @@ t_op		operations(t_all *all, int *i);
 void		print_errors(t_all *all, char *filename);
 int			memory_error(void);
 
-// void		assembler(t_all *all);
-int			ft_atoi_base(const char *str, int base);
+void		assembler(t_all *all);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/09 20:47:34 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,37 +50,44 @@ int		miniatoi(t_all *all)
 	return (s);
 }
 
-void    checkmet(t_all *all, int f, int f1)
+int scan_met(t_all *all)
+{
+	unsigned		j;
+
+	j = 0;
+	while(LABEL_CHARS[j])
+	{
+		if (all->line[all->i] != LABEL_CHARS[j])
+			++j;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+void    checkmet(t_all *all, t_type	tp)
 {
 	unsigned		j;
 	unsigned 		i;
 	t_tokens		*token;
-	t_type			tp;
+	int 			f;
 
-	i = f1 ? all->i - 1 : all->i;
-	tp = !f1 ? LABEL : DIRECT;
-	f && all->line[all->i] != LABEL_CHAR ? ft_error(all, Syntactic, No_colon_before) : 0;
+	f = tp == LABEL ? 0 : 1; //если не метка то f == 1
+	i = all->i;
+	f && all->line[all->i] != LABEL_CHAR ? ft_error(all, Syntactic, No_colon_before) : ++all->i; // если не метка то должна начинаться с :
 	while(all->line[all->i])
 	{
-		j = 0;
-		while(LABEL_CHARS[j])
+		j = scan_met(all); //j == 0 запрщенный символ
+		!j && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, Lexical, Wrong_lchar) : 0; // метка но в конце нет :
+		if (!j && !f && all->line[all->i] == LABEL_CHAR)
 		{
-			if (all->line[all->i] != LABEL_CHARS[j])
-				++j;
-			else
-				break;
-		}
-		!LABEL_CHARS[j] && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, Lexical, Wrong_lchar) : 0;
-		if (!LABEL_CHARS[j] && all->line[all->i] == LABEL_CHAR  && !f)
-		{
-		   	++all->i;
+			++all->i;
 			break;
 		}
-		if (!LABEL_CHARS[j] && all->line[all->i] == SEPARATOR_CHAR  && f)
-		{
-	//		++all->i;
+		if (!j && all->line[all->i] == SEPARATOR_CHAR && f)
 			break;
-		}
+		if (!j)
+			break;
 		++all->i;
 	}
 	token = ft_newtokens(all, tp, -1);
@@ -128,7 +135,12 @@ int ft_dir(t_all *all, int *k)
 	if (all->line[all->i + 1] == LABEL_CHAR)
 	{
 		++all->i;
-		checkmet(all, 1, 1);
+		if (all->i + 1 ==  DIRECT_CHAR)
+		{
+			++all->i;
+			checkmet(all, INDIRECT);
+		}
+		else checkmet(all, DIRECT);
 		return (1);
 	}
 	++all->i;
@@ -157,7 +169,7 @@ int ft_idir(t_all *all, int *k)
 	quick_pass(all);
 	if (all->line[all->i] == LABEL_CHAR)
 	{
-		checkmet(all, 1, 0);
+		checkmet(all, INDIRECT);
 		return (1);
 	}
 	i = all->i;
@@ -222,7 +234,7 @@ void			tokens(t_all *all)
 	a = operations(all, &i);
 	if (!a.cmd[0])
 	{
-		checkmet(all, 0, 0);
+		checkmet(all, LABEL);
 		i = -1;
 		quick_pass(all);
 		if (!all->line[all->i])
@@ -257,6 +269,6 @@ void	parseng(t_all *all)
 		}
 	}
 	all->i = 0;
-	if (!all->parsing || last_check(all, 1))
+	if (!all->parsing /*|| last_check(all, 1)*/)
 		ft_error(all, Syntactic, No_last_line);
 }
