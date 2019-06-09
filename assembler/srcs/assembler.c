@@ -7,10 +7,6 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
 /*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
-.fr       */
-=======
-/*   Updated: 2019/06/09 22:08:44 by gabshire         ###   ########.fr       */
->>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,21 +242,12 @@ int main(int a, char **b)
 		ft_printf("\n");
 		all.parsing = all.parsing->next;
 	}
-<<<<<<< HEAD
 //	assembler(&all);
 //	while(all.source)
 //	{
 //		ft_printf("%s\n", all.source->content);
 //		all.source = all.source->next;
 //	}
-=======
-	// assembler(&all);
-	// while(all.source)
-	// {
-	// 	ft_printf("%s\n", all.source->content);
-	// 	all.source = all.source->next;
-	// }
->>>>>>> master
 	close(all.fd);
 	return (0);
 }

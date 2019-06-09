@@ -7,10 +7,6 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
 /*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
-.fr       */
-=======
-/*   Updated: 2019/06/09 22:08:44 by gabshire         ###   ########.fr       */
->>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,11 +140,6 @@ t_op		operations(t_all *all, int *i);
 void		print_errors(t_all *all, char *filename);
 int			memory_error(void);
 
-<<<<<<< HEAD
 void		assembler(t_all *all);
-=======
-// void		assembler(t_all *all);
-int			ft_atoi_base(const char *str, int base);
->>>>>>> master
 
 #endif
