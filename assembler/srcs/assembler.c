@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/08 12:42:41 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/09 20:04:48 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int		checkform(t_all *all)
 			all->line = NULL;
 		}
 	}
-	//free(all->line);
 	all->line = all->pred_line;
 	return (t);
 }
@@ -212,12 +211,12 @@ int main(int a, char **b)
 		ft_printf("\n");
 		all.parsing = all.parsing->next;
 	}
-	assembler(&all);
-	while(all.source)
-	{
-		ft_printf("%s\n", all.source->content);
-		all.source = all.source->next;
-	}
+//	assembler(&all);
+//	while(all.source)
+//	{
+//		ft_printf("%s\n", all.source->content);
+//		all.source = all.source->next;
+//	}
 	close(all.fd);
 	return (0);
 }
