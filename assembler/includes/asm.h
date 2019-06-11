@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/11 03:32:58 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/11 06:53:18 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,6 @@ typedef struct	s_error
 	struct s_error	*next;
 }				t_error;
 
-/*
- * str имя метки, при следующем заходе значение меняется на распознанное число
- */
-
 typedef    enum    e_type
 {
 	LABEL, // метка
@@ -96,7 +92,8 @@ typedef struct			s_tokens
 	unsigned int		i;
 	t_type				tp;
 	t_operation			operation;
-	unsigned char		size;
+	char				size;
+	unsigned int		t_r;
 	struct 	s_tokens *next;
 }						t_tokens;
 
@@ -124,14 +121,14 @@ typedef struct			s_all
 	t_list			*parsing;
 	t_tokens		*temp;
 	t_error			*errors;
-	t_list			*source;
+	char			*source;
 }						t_all;
 
 /*
  * работа с листами токинов
  */
 
-t_tokens	*ft_newtokens(t_all *all, t_type tp, int instr);
+t_tokens	*ft_newtokens(t_all *all, t_type tp, int o, char size);
 void		ft_tokenspush(t_tokens **alst, t_tokens *new);
 void		ft_tokensadd(t_tokens **alst, t_tokens *new);
 
@@ -147,5 +144,6 @@ int			memory_error(void);
 
 // void		assembler(t_all *all);
 char		**cw_strsplit(char *champ);
+void		translate_into_byte_code(t_all *all);
 
 #endif

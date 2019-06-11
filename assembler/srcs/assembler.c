@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 06:40:11 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/11 06:55:34 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,21 +214,22 @@ static void	assembler(char *file_name)
 	parseng(&all);
 	if (all.errors)
 		print_errors(&all, file_name);
-	while(all.parsing)	//	start debug
-	{
-		read = all.parsing->content;
-		while(read)
-		{
-			ft_printf("%s ", read->str);
-			read = read->next;
-		}
-		ft_printf("\n");
-		all.parsing = all.parsing->next;
-	}	//	finish debug
+//	while(all.parsing)	//	start debug
+//	{
+//		read = all.parsing->content;
+//		while(read)
+//		{
+//			ft_printf("%s ", read->str);
+//			read = read->next;
+//		}
+//		ft_printf("\n");
+//		all.parsing = all.parsing->next;
+//	}	//	finish debug
 	close(all.fd);
 	file_name = change_file_extension(file_name);
 	if ((all.fd = open(file_name, O_WRONLY|O_TRUNC|O_CREAT, 0644)) == -1)
 		exit(1);	//	надо будет расширить
+	translate_into_byte_code(&all);
 }
 
 static int  check_file_format(char *av)
