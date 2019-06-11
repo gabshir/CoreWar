@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/11 06:53:18 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/11 07:51:31 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void		ft_tokenspush(t_tokens **alst, t_tokens *new);
 void		ft_tokensadd(t_tokens **alst, t_tokens *new);
 
 void		ft_error(t_all *all, t_er_type type, t_case_type reason);
-int			last_check(t_all *all, int f);
+int			last_check(t_all *all);
 int			checkform(t_all *all);
 void		parseng(t_all *all);
 void		quick_pass(t_all *all);

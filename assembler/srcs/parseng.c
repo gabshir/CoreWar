@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 06:59:07 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/11 09:51:20 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void    checkmet(t_all *all, t_type	tp, char size)
 		++all->i;
 		i = all->i;
 	}
-	while(all->line[all->i])
+	while(all->line[all->i] && all->line[all->i] != '\n')
 	{
 		j = scan_met(all); //j == 0 запрщенный символ
 		if (!j)
@@ -92,12 +92,14 @@ void    checkmet(t_all *all, t_type	tp, char size)
 			|| all->line[all->i] == ALT_COMMENT_CHAR
 			|| all->line[all->i] == COMMENT_CHAR) && f)
 				break;
-			else ft_error(all, Lexical, Wrong_lchar);
+			else
+				ft_error(all, Lexical, Wrong_lchar);
 			break ;
 		}
 		++all->i;
 	}
-	f = !f && all->line[all->i - 1] == LABEL_CHAR ? all->i - i - 1 : all->i - i;
+	if (all->i > 0)
+		f = !f && all->line[all->i - 1] == LABEL_CHAR ? all->i - i - 1 : all->i - i;
 	token = ft_newtokens(all, tp, -1, size);
 	token->str = ft_strsub(all->line, i, f);
 	ft_tokenspush(&all->temp, token);
@@ -207,7 +209,7 @@ void		ft_parseng(t_all *all, t_op a, t_operation op)
 		if (!a.arg_type[j])
 			++j;
 		else
-			{
+		{
 			v = tablica(a.arg_type[j]);
 			quick_pass(all);
 			v[0] == 1 ? f = ft_idir(all, &k, IND_SIZE) : 0;
@@ -217,7 +219,7 @@ void		ft_parseng(t_all *all, t_op a, t_operation op)
 			!f ? ft_error(all, Syntactic, Wrong_argument) : ++j;
 		}
 	}
-	last_check(all, 0) ? ft_error(all, Syntactic, Odd_argument) : 0;
+	last_check(all) ? ft_error(all, Syntactic, Odd_argument) : 0;
 }
 
 void			tokens(t_all *all)
@@ -248,7 +250,8 @@ void			tokens(t_all *all)
 	token = ft_newtokens(all, INSTRUCTION, i, size);
 	token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
 	ft_tokenspush(&all->temp, token);
-	ft_parseng(all, a, i);
+	if (a.cmd[0])
+		ft_parseng(all, a, i);
 }
 
 void	parseng(t_all *all)

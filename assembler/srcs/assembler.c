@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 06:55:34 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/11 10:49:19 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,13 @@ int		checkform(t_all *all)
 	return (0);
 }
 
-int		last_check(t_all *all, int f)
+int		last_check(t_all *all)
 {
 	char	c;
 	char	ac;
 
 	c = COMMENT_CHAR;
 	ac = ALT_COMMENT_CHAR;
-	f ? all->line = all->pred_line : 0;
 	while (all->line[all->i])
 	{
 		if (all->line[all->i] == ' ' || all->line[all->i] == '\t' || all->line[all->i] == '\n')
@@ -103,7 +102,13 @@ void	checkname(t_all *all, int f)
 	i = 0;
 	length = f == 0 ? PROG_NAME_LENGTH : COMMENT_LENGTH;
 	quick_pass(all);
-	all->line[all->i] && all->line[all->i]  == '"' ? ++all->i : ft_error(all, Syntactic, Wrong_argument);
+	if (all->line[all->i] && all->line[all->i]  != '"')
+	{
+		ft_error(all, Syntactic, Wrong_argument);
+		return ;
+	}
+	++all->i;
+	// all->line[all->i] && all->line[all->i]  == '"' ? ++all->i : ft_error(all, Syntactic, Wrong_argument);
 	while(i < length && all->line && all->line[all->i] != '"')
 	{
 		f == 0 ? all->prog_name[i] = all->line[all->i] : 0;
@@ -117,7 +122,7 @@ void	checkname(t_all *all, int f)
 		}
 	}
 	i == length && all->line[all->i] != '"' ? ft_error(all, Semantic, CMD_size_exceeded) : ++all->i;
-	last_check(all, 0) ? ft_error(all, Syntactic, Wrong_argument) : 0;
+	last_check(all) ? ft_error(all, Syntactic, Wrong_argument) : 0;
 }
 
 int cheak_name_and_comment(t_all *all, int f)
@@ -147,9 +152,12 @@ int cheak_name_and_comment(t_all *all, int f)
 
 void	readfile(t_all *all)
 {
-	char		flags[2];
+	char	flags[2];
+	// unsigned int	*coords[2];
 
 	ft_bzero(&flags, 2);
+	// coords[0] = &all->st;
+	// coords[1] = &all->i;
 	all->magic = COREWAR_EXEC_MAGIC;
 	while(!flags[0] || !flags[1])
 	{
@@ -167,10 +175,15 @@ void	readfile(t_all *all)
 		}
 		else
 		{
+			// if (!flags[0] && !flags[1])
+			// {
+				
+			// }
 			ft_error(all, Semantic, Bad_CMD_declaration);
 			break ;
 		}
 	}
+	// ft_printf("%s\n%s\n", all->prog_name, all->comment);
 }
 
 static void	copy_text(t_all *all)
@@ -204,7 +217,7 @@ static char	*change_file_extension(char *name)
 static void	assembler(char *file_name)
 {
 	t_all	all;
-	t_tokens *read;
+	// t_tokens *read;
 
 	ft_bzero(&all, sizeof(all));
 	all.st = -1;

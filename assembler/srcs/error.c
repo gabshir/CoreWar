@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 06:56:53 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/11 10:22:44 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,6 @@ static char	*put_caret(t_error *error)
 
 	SECURE_MALLOC(caret = ft_memalloc(ft_strlen(error->line) + 1));
 	i = -1;
-	// if (!error->line)
-	// 	exit(1);
 	while (error->line[++i])
 	{
 		if (error->line[i] == '\t')
