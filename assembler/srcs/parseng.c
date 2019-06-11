@@ -90,7 +90,8 @@ void    checkmet(t_all *all, t_type	tp, char size)
 				++all->i;
 			else if ((all->line[all->i] == SEPARATOR_CHAR
 			|| all->line[all->i] == ALT_COMMENT_CHAR
-			|| all->line[all->i] == COMMENT_CHAR) && f)
+			|| all->line[all->i] == COMMENT_CHAR || all->line[all->i] == '\n'
+			||	all->line[all->i] == '\t') && f)
 				break;
 			else ft_error(all, Lexical, Wrong_lchar);
 			break ;

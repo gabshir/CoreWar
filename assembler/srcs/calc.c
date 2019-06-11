@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 08:50:56 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/11 16:54:42 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,21 +81,26 @@ int 		label_distance(t_tokens *token, t_all *all)
 	t_tokens	*copyscan;
 	int			r;
 	t_list		*parseng;
+	t_tokens	*test;
 
 	parseng = all->parsing;
 	while (parseng)
 	{
 		copyscan = parseng->content;
 		if ((!(ft_strcmp(copyscan->str, token->str))) && copyscan->tp == LABEL)
-			break ;
+		{
+			test = copyscan->next;
+			break;
+		}
 		parseng = parseng->next;
 	}
 	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
 	if (copyscan->t_r > token->t_r)
-		r = copyscan->t_r;
+		r = copyscan->t_r - token->t_r + 1;
 	else
 		{
-			r = token->t_r - copyscan->t_r - 1;
+			r = token->t_r - copyscan->t_r - 1;//+ test->size;
+		//	test->size == 2 ? r = r + 2 : 0;
 			r = -r;
 		}
 	return (r);
@@ -104,17 +109,25 @@ int 		label_distance(t_tokens *token, t_all *all)
 void dop_code(int s, t_all *all, size_t size)
 {
 	int f;
+	unsigned char c;
 
 	f = s < 0 ? 1 : 0;
 	s < 0 ? s = -s  : 0;
 	translate_to_bytecode(all, size, s);
 	if (f == 1)
 	{
-		all->source[all->i - 2] =~ all->source[all->i];
-		all->source[all->i - 1] =~ all->source[all->i - 1];
-		all->source[all->i - 1] += 1;
+		all->source[all->i - 2] =~ all->source[all->i - 2];
+		c =~ all->source[all->i - 1];
+		if (c == 0xff)
+		{
+			//c -= 0xff;
+			all->source[all->i - 2] += 1;
+		}
+		c += 1;
+		all->source[all->i - 1] = c;
+//		all->source[all->i - 1] =~ all->source[all->i - 1];
+//		all->source[all->i - 1] += 1;
 	}
-
 }
 
 void		operation_to_bytecode(t_all *all)
@@ -136,7 +149,7 @@ void		operation_to_bytecode(t_all *all)
 			else if (copytoken->tp == REGISTER)
 			{
 				r = ft_atoi(copytoken->str);
-				translate_to_bytecode(all,copytoken->size, r);
+				translate_to_bytecode(all, copytoken->size, r);
 			}
 			else if (copytoken->tp == DIRECT || copytoken->tp == INDIRECT)
 				dop_code(ft_atoi(copytoken->str), all, copytoken->size);
@@ -167,10 +180,8 @@ unsigned	size_soure(t_list *parseng)
 			copy->tp == LABEL || copy->tp == DIRLABEL
 			|| copy->tp == INDIRLABEL ? copy->t_r = size : 0;
 			size += copy->size;
-			ft_printf("%s ", copy->str);
 			copy = copy->next;
 		}
-		ft_printf("\n");
 		parseng = parseng->next;
 	}
 	return (size);
