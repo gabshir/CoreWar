@@ -6,7 +6,7 @@
 /*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 06:11:22 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/11 06:41:32 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,19 @@ int 		label_distance(t_tokens *token, t_all *all)
 		parseng = parseng->next;
 	}
 	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
-	if (token->t_r > copyscan->t_r)
-		r = token->t_r - copyscan->t_r;
+	if (copyscan->t_r > token->t_r)
+		r = copyscan->t_r;
 	else
-		r = copyscan->t_r - token->t_r;
+		{
+			if (copyscan->next)
+				copyscan = copyscan->next;
+			else
+			{
+				parseng = parseng->next;
+				copyscan = parseng->content;
+			}
+			r = token->t_r - copyscan->t_r;
+		}
 	return (r);
 }
 
