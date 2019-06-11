@@ -6,13 +6,13 @@
 /*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 17:49:19 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/10 17:43:23 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-t_tokens	*ft_newtokens(t_all *all, t_type tp, int o)
+t_tokens	*ft_newtokens(t_all *all, t_type tp, int o, char size)
 {
 	t_tokens	*new;
 
@@ -24,6 +24,8 @@ t_tokens	*ft_newtokens(t_all *all, t_type tp, int o)
 	new->i = all->i;
 	new->tp = tp;
 	new->operation = o;
+	new->t_r = 0;
+	new->size = size;
 	return (new);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/11 04:20:36 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int scan_met(t_all *all)
 	return (0);
 }
 
-void    checkmet(t_all *all, t_type	tp)
+void    checkmet(t_all *all, t_type	tp, char size)
 {
 	unsigned		j;
 	unsigned 		i;
@@ -74,28 +74,46 @@ void    checkmet(t_all *all, t_type	tp)
 
 	f = tp == LABEL ? 0 : 1; //если не метка то f == 1
 	i = all->i;
-	f && all->line[all->i] != LABEL_CHAR ? ft_error(all, Syntactic, No_colon_before) : ++all->i; // если не метка то должна начинаться с :
+	if (f && all->line[all->i] != LABEL_CHAR)
+		ft_error(all, Syntactic, No_colon_before);
+	else if ((f && all->line[all->i] == LABEL_CHAR))
+	{
+		++all->i;
+		i = all->i;
+	}
 	while(all->line[all->i])
 	{
 		j = scan_met(all); //j == 0 запрщенный символ
-		!j && all->line[all->i] != LABEL_CHAR  && !f ? ft_error(all, Lexical, Wrong_lchar) : 0; // метка но в конце нет :
-		if (!j && !f && all->line[all->i] == LABEL_CHAR)
-		{
-			++all->i;
-			break;
-		}
-		if (!j && all->line[all->i] == SEPARATOR_CHAR && f)
-			break;
 		if (!j)
-			break;
+		{
+			if (!f && all->line[all->i] == LABEL_CHAR)
+				++all->i;
+			else if ((all->line[all->i] == SEPARATOR_CHAR
+			|| all->line[all->i] == ALT_COMMENT_CHAR
+			|| all->line[all->i] == COMMENT_CHAR) && f)
+				break;
+			else ft_error(all, Lexical, Wrong_lchar);
+			break ;
+		}
 		++all->i;
 	}
-	token = ft_newtokens(all, tp, -1);
-	token->str = ft_strsub(all->line, i, all->i - i);
+	f = !f && all->line[all->i - 1] == LABEL_CHAR ? all->i - i - 1 : all->i - i;
+	token = ft_newtokens(all, tp, -1, size);
+	token->str = ft_strsub(all->line, i, f);
 	ft_tokenspush(&all->temp, token);
 }
 
-int 	ft_reg(t_all *all, int *k)
+void 	sep_char(t_all *all, int k)
+{
+	if (k > 0)
+	{
+		quick_pass(all);
+		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
+		quick_pass(all);
+	}
+}
+
+int 	ft_reg(t_all *all, int *k, char size)
 {
 	int			s;
 	unsigned	i;
@@ -110,38 +128,34 @@ int 	ft_reg(t_all *all, int *k)
 	if (all->i - i > 2 || i - all->i == 0 || s == 0)
 		ft_error(all, Lexical, Incorrect_int);
 	--k[0];
-	token = ft_newtokens(all, REGISTER, -1);
+	token = ft_newtokens(all, REGISTER, -1, size);
 	token->str = ft_strsub(all->line, i, all->i - i);
-	if (k[0] > 0)
-	{
-		quick_pass(all);
-		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
-		quick_pass(all);
-	}
+	sep_char(all, k[0]);
 	ft_tokenspush(&all->temp, token);
 	return (1);
 }
 
-int ft_dir(t_all *all, int *k)
+int vn_met(t_all *all, t_type tp, int k, char size)
 {
-	char		c;
+	checkmet(all, tp, size);
+	sep_char(all, k);
+	return (1);
+}
+
+int ft_dir(t_all *all, int *k, t_operation op)
+{
 	unsigned	i;
 	t_tokens	*token;
+	char		size;
 
-	c = DIRECT_CHAR;
 	quick_pass(all);
-	if (all->line[all->i] != c)
+	size = op == zjmp || op == ldi || op == sti || op == ffork || op == lldi || op == lfork ? 2 : 4;
+	if (all->line[all->i] != DIRECT_CHAR)
 		return (0);
 	if (all->line[all->i + 1] == LABEL_CHAR)
 	{
 		++all->i;
-		if (all->i + 1 ==  DIRECT_CHAR)
-		{
-			++all->i;
-			checkmet(all, INDIRECT);
-		}
-		else checkmet(all, DIRECT);
-		return (1);
+		return (vn_met(all, DIRLABEL, k[0], size));
 	}
 	++all->i;
 	i = all->i;
@@ -149,47 +163,34 @@ int ft_dir(t_all *all, int *k)
 	if (i - all->i == 0)
 		return (0);
 	--k[0];
-	token = ft_newtokens(all, DIRECT, -1);
-	token->str = ft_strsub(all->line, i - 1, all->i - i + 1);
-	if (k[0] > 0)
-	{
-		quick_pass(all);
-		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
-		quick_pass(all);
-	}
+	token = ft_newtokens(all, DIRECT, -1, size);
+	token->str = ft_strsub(all->line, i, all->i - i);
+	sep_char(all, k[0]);
 	ft_tokenspush(&all->temp, token);
 	return (1);
 }
 
-int ft_idir(t_all *all, int *k)
+int ft_idir(t_all *all, int *k, char size)
 {
 	unsigned i;
 	t_tokens *token;
 
 	quick_pass(all);
 	if (all->line[all->i] == LABEL_CHAR)
-	{
-		checkmet(all, INDIRECT);
-		return (1);
-	}
+		return (vn_met(all, INDIRLABEL, k[0], size));
 	i = all->i;
 	miniatoi(all);
 	if (i - all->i == 0)
 		return (0);
 	--k[0];
-	token = ft_newtokens(all, INDIRECT, -1);
+	token = ft_newtokens(all, INDIRECT, -1, size);
 	token->str = ft_strsub(all->line, i, all->i - i);
-	if (k[0] > 0)
-	{
-		quick_pass(all);
-		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
-		quick_pass(all);
-	}
+	sep_char(all, k[0]);
 	ft_tokenspush(&all->temp, token);
 	return (1);
 }
 
-void		ft_parseng(t_all *all, t_op a)
+void		ft_parseng(t_all *all, t_op a, t_operation op)
 {
 	char		*v;
 	unsigned	j;
@@ -209,15 +210,11 @@ void		ft_parseng(t_all *all, t_op a)
 			{
 			v = tablica(a.arg_type[j]);
 			quick_pass(all);
-			if (v[0] == 1)
-				f = ft_idir(all, &k);
-			if (v[1] == 1 && !f)
-				f = ft_dir(all, &k);
-			if (v[2] == 1 && !f)
-				f = ft_reg(all, &k);
+			v[0] == 1 ? f = ft_idir(all, &k, IND_SIZE) : 0;
+			!f && v[1] == 1 ? f = ft_dir(all, &k, op) : 0;
+			!f && v[2] == 1 ? f = ft_reg(all, &k, T_REG) : 0;
 			free(v);
-			!f ? ft_error(all, Syntactic, Wrong_argument) : 0;
-			++j;
+			!f ? ft_error(all, Syntactic, Wrong_argument) : ++j;
 		}
 	}
 	last_check(all, 0) ? ft_error(all, Syntactic, Odd_argument) : 0;
@@ -228,13 +225,14 @@ void			tokens(t_all *all)
 	t_op		a;
 	t_tokens	*token;
 	int			i;
+	char 		size;
 
 	quick_pass(all);
 	i = -1;
 	a = operations(all, &i);
 	if (!a.cmd[0])
 	{
-		checkmet(all, LABEL);
+		checkmet(all, LABEL, 0);
 		i = -1;
 		quick_pass(all);
 		if (!all->line[all->i])
@@ -245,13 +243,12 @@ void			tokens(t_all *all)
 		}
 		a = operations(all, &i);
 	}
-	if (a.cmd[0])
-	{
-		token = ft_newtokens(all, INSTRUCTION, i);
-		token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
-		ft_tokenspush(&all->temp, token);
-	}
-	!a.cmd[0] ? ft_error(all, Syntactic, Uknown_instr) : ft_parseng(all, a);
+	!a.cmd[0] ? ft_error(all, Syntactic, Uknown_instr) : 0;
+	size = i == live || i == zjmp || i == ffork || i == lfork || i == aff ? 1 : 2;
+	token = ft_newtokens(all, INSTRUCTION, i, size);
+	token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
+	ft_tokenspush(&all->temp, token);
+	ft_parseng(all, a, i);
 }
 
 void	parseng(t_all *all)

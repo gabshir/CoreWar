@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/10 23:17:39 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,21 @@ int		checkform(t_all *all)
 	return (t);
 }
 
-int		checkform(t_all *all)
-{	
-	while ((all->line = &all->split[all->st]))
-	{
-		++all->st;
-		all->i = 0;
-		if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR)
-			continue ;
-		if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
-			all->i++;
-		else
-			return (1);
-	}
-	return (0);
-}
+//int		checkform(t_all *all)
+//{
+//	while ((all->line = &all->split[all->st]))
+//	{
+//		++all->st;
+//		all->i = 0;
+//		if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR)
+//			continue ;
+//		if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
+//			all->i++;
+//		else
+//			return (1);
+//	}
+//	return (0);
+//}
 
 int		last_check(t_all *all, int f)
 {
@@ -198,56 +198,89 @@ void	readfile(t_all *all)
 // 	ft_error(NULL, 1) : 0;
 // }
 
-static void	copy_text(t_all *all)
-{
-	char	*buffer;
-	char	*champ;
+//static void	copy_text(t_all *all)
+//{
+//	char	*buffer;
+//	char	*champ;
+//
+//	SECURE_MALLOC(buffer = ft_strnew(MEM_SIZE));
+//	champ = NULL;
+//	while (read(all->fd, buffer, MEM_SIZE) > 0)
+//		champ = ft_strjoin_free(champ, buffer, 3);
+//	if (champ[ft_strlen(champ) - 1] != '\n')
+//		ft_error(all, Syntactic, No_last_line);
+//	all->split = ft_strsplit(champ, '\n');
+//}
 
-	SECURE_MALLOC(buffer = ft_strnew(MEM_SIZE));
-	champ = NULL;
-	while (read(all->fd, buffer, MEM_SIZE) > 0)
-		champ = ft_strjoin_free(champ, buffer, 3);
-	if (champ[ft_strlen(champ) - 1] != '\n')
-		ft_error(all, Syntactic, No_last_line);
-	all->split = ft_strsplit(champ, '\n');
+
+static char    *change_file_extension(char *name)
+{
+	char    *reserved_ptr;
+	char    *new_name;
+	size_t    new_len;
+
+	reserved_ptr = name;
+	new_len = ft_strlen(name) + 2;
+	// if (!(name = realloc(name, n_len + 3)))
+	// {
+	//     SECURE_MALLOC(name = ft_strnew(n_len + 2));
+	//     name = ft_strcpy(name, reserved_ptr);
+	// }
+	SECURE_MALLOC(new_name = ft_strnew(new_len));
+	new_name = ft_strcpy(new_name, name);
+	reserved_ptr = &name[new_len - 3];
+	reserved_ptr = ft_strcpy(reserved_ptr, "cor");
+	return (name);
 }
 
-int main(int a, char **b)
+static void	assembler(char *file_name)
 {
-	// int fd;
 	t_all	all;
 	t_tokens *read;
 
-	if (a != 2)
-	{
-		write(2, "usage", 5);
-		exit(1);
-	}
-	// checkmakros();
 	ft_bzero(&all, sizeof(all));
-	all.fd = ft_read_file(b[1]);
-	copy_text(&all);
+	all.fd = ft_read_file(file_name);
+	//copy_text(&all);
 	readfile(&all);
 	parseng(&all);
 	if (all.errors)
-		print_errors(&all, b[1]);
-	while(all.parsing)
-	{
-		read = all.parsing->content;
-		while(read)
-		{
-			ft_printf("%s ", read->str);
-			read = read->next;
-		}
-		ft_printf("\n");
-		all.parsing = all.parsing->next;
-	}
-//	assembler(&all);
-//	while(all.source)
+		print_errors(&all, file_name);
+//	while(all.parsing)	//	start debug
 //	{
-//		ft_printf("%s\n", all.source->content);
-//		all.source = all.source->next;
-//	}
+//		read = all.parsing->content;
+//		while(read)
+//		{
+//			ft_printf("%s ", read->str);
+//			read = read->next;
+//		}
+//		ft_printf("\n");
+//		all.parsing = all.parsing->next;
+//	}	//	finish debug
 	close(all.fd);
+	file_name = change_file_extension(file_name);
+	if ((all.fd = open(file_name, O_WRONLY|O_TRUNC|O_CREAT, 0644)) == -1)
+		exit(1);	//	надо будет расширить
+	translate_into_byte_code(&all);
+}
+
+static int  check_file_format(char *av)
+{
+	size_t	n_len;
+
+	n_len = ft_strlen(av);
+
+	if (!ft_strcmp(&av[n_len - 2], ".s"))
+		return (1);
+	else
+		return (0);
+}
+
+int main (int ac, char **av)
+{
+	if (ac == 2 && check_file_format(av[1]))
+		assembler(av[1]);
+	else
+		ft_printf("This program compiles only .s file, \
+			and only one at a time.\n");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/09 22:26:10 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ static char	*get_reason_str(t_case_type reason)
 		reas = "Uknown instruction";
 	else if (reason == No_last_line)
 		reas = "No last empty line found";
+	else if (reason == Label_not_found)
+		reas = "Label_not_found";
 	return (reas);
 }
 
