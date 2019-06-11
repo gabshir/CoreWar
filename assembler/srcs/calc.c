@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 06:55:58 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/11 08:50:56 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,26 +95,26 @@ int 		label_distance(t_tokens *token, t_all *all)
 		r = copyscan->t_r;
 	else
 		{
-			if (copyscan->next)
-				copyscan = copyscan->next;
-			else
-			{
-				parseng = parseng->next;
-				copyscan = parseng->content;
-			}
-			r = token->t_r - copyscan->t_r;
+			r = token->t_r - copyscan->t_r - 1;
+			r = -r;
 		}
 	return (r);
 }
 
-int 	dop_code(int s)
+void dop_code(int s, t_all *all, size_t size)
 {
-	if (s < 0)
+	int f;
+
+	f = s < 0 ? 1 : 0;
+	s < 0 ? s = -s  : 0;
+	translate_to_bytecode(all, size, s);
+	if (f == 1)
 	{
-		s =~ s;
-		s += 1;
+		all->source[all->i - 2] =~ all->source[all->i];
+		all->source[all->i - 1] =~ all->source[all->i - 1];
+		all->source[all->i - 1] += 1;
 	}
-	return (s);
+
 }
 
 void		operation_to_bytecode(t_all *all)
@@ -139,14 +139,11 @@ void		operation_to_bytecode(t_all *all)
 				translate_to_bytecode(all,copytoken->size, r);
 			}
 			else if (copytoken->tp == DIRECT || copytoken->tp == INDIRECT)
-			{
-				r = dop_code(ft_atoi(copytoken->str));
-				translate_to_bytecode(all, copytoken->size, r);
-			}
+				dop_code(ft_atoi(copytoken->str), all, copytoken->size);
 			else if (copytoken->tp == DIRLABEL || copytoken->tp == INDIRLABEL)
 			{
 				r = label_distance(copytoken, all);
-				translate_to_bytecode(all, copytoken->size, dop_code(r));
+				dop_code(r, all, copytoken->size);
 			}
 			copytoken = copytoken->next;
 		}
@@ -185,7 +182,7 @@ void		translate_into_byte_code(t_all *all)
 	unsigned	size;
 
 	all->prog_size = size_soure(all->parsing);
-	size = all->prog_size + PROG_NAME_LENGTH + COMMENT_LENGTH + 8;
+	size = all->prog_size + PROG_NAME_LENGTH + COMMENT_LENGTH + 16;
 	if (!(all->source = ft_strnew(size)))
 		return ;
 	all->i = 0;
