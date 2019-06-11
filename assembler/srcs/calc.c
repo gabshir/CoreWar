@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calc.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/10 21:23:20 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@
 //}
 
 
-void		assembler(t_all *all)
-{
-	t_list	*temp;
+// void		assembler(t_all *all)
+// {
+// 	t_list	*temp;
 
-//	temp = ft_lstnew(NULL, 0);
-//	temp->content = magik(all->magic);
-//	ft_lstpush(&all->source, temp);
-	char test[5];
+// //	temp = ft_lstnew(NULL, 0);
+// //	temp->content = magik(all->magic);
+// //	ft_lstpush(&all->source, temp);
+// 	char test[5];
 
-	write(1, test, 3);
-	temp = ft_lstnew(NULL, 0);
-	ft_lstpush(&all->source, temp);
-}
+// 	write(1, test, 3);
+// 	temp = ft_lstnew(NULL, 0);
+// 	ft_lstpush(&all->source, temp);
+// }

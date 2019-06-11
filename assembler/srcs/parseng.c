@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/11 06:38:11 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ void			tokens(t_all *all)
 		checkmet(all, LABEL);
 		i = -1;
 		quick_pass(all);
-		if (!all->line[all->i])
+		if (!all->line[all->i] || all->line[all->i] == '\n')
 		{
 			ft_lstpush(&all->parsing, ft_lstnew_ptr(all->temp));
 			all->temp = NULL;
@@ -251,11 +251,13 @@ void			tokens(t_all *all)
 		token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
 		ft_tokenspush(&all->temp, token);
 	}
-	!a.cmd[0] ? ft_error(all, Syntactic, Uknown_instr) : ft_parseng(all, a);
+	!a.cmd[0] ? ft_error(all, Syntactic, Unknown_instr) : ft_parseng(all, a);
 }
 
 void	parseng(t_all *all)
 {
+	size_t	last_line_len;
+	
 	while (checkform(all))
 	{
 		if (all->line)
@@ -264,11 +266,14 @@ void	parseng(t_all *all)
 			tokens(all);
 			all->temp ? ft_lstpush(&all->parsing, ft_lstnew_ptr(all->temp)) : 0;
 			all->temp = NULL;
-			free(all->line);
-			all->line = NULL;
 		}
 	}
-	all->i = 0;
-	if (!all->parsing /*|| last_check(all, 1)*/)
+	--all->st;
+	last_line_len = ft_strlen(all->split[all->st]);
+	if (all->split[all->st][last_line_len - 1] != '\n')
+	{
+		all->line = all->split[all->st];
+		all->i = last_line_len - 1;
 		ft_error(all, Syntactic, No_last_line);
+	}
 }

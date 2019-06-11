@@ -6,7 +6,7 @@
 #    By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 17:32:16 by jwillem-          #+#    #+#              #
-#    Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr        #
+#    Updated: 2019/06/11 05:10:19 by jwillem-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ STR :=	ft_atoi		ft_close_file	ft_intlen	ft_isalnum	ft_isalpha	ft_isascii	ft_isdi
 		ft_strmap	ft_strmapi	ft_strncat		ft_strncmp		ft_strncpy			ft_strnequ	\
 		ft_strnew	ft_strnstr	ft_strpbrk		ft_strrchr		ft_strsplit			ft_strstr	\
 		ft_strsub	ft_strtoupper	ft_strtrim	ft_tolower		ft_toupper			ft_uitoa_base	\
-		get_next_line 	ft_swap		ft_freesplit	ft_atoi_base\
+		ft_swap		get_next_line 	ft_freesplit				ft_strsplit_len		ft_atoi_base	\
 
 COMPILE := gcc -Wall -Wextra -Werror -g -o2
 OBJDIR := obj/

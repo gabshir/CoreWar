@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 19:08:46 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/11 05:10:58 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ char			*ft_strjoin_free(char *s1, char *s2, int operation);
 char			*ft_str_toupper(char *str);
 void			ft_swap(int *a, int *b);
 void			ft_uniswap(void *a, void *b, size_t size);
+size_t  		ft_strsplit_len(char **split);
 int				ft_printf(const char *format, ...);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/09 22:13:01 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/11 03:32:58 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 # include "op.h"
 
 # define SECURE_MALLOC(a)	!(a) && memory_error()
+
+# define ERROR_RED			"\x1b[91;1m"
+# define ERROR_GREEN		"\x1b[92;1m"
+# define ERROR_WHITE		"\x1b[97;1m"
 
 typedef enum	e_er_type
 {
@@ -35,8 +39,9 @@ typedef enum	e_case_type
 	No_colon_before,
 	No_colon_after,
 	No_comma,
-	Uknown_instr,
-	No_last_line
+	Unknown_instr,
+	No_last_line,
+	Label_not_found
 }				t_case_type;
 
 typedef struct	s_error
@@ -140,6 +145,7 @@ t_op		operations(t_all *all, int *i);
 void		print_errors(t_all *all, char *filename);
 int			memory_error(void);
 
-void		assembler(t_all *all);
+// void		assembler(t_all *all);
+char		**cw_strsplit(char *champ);
 
 #endif

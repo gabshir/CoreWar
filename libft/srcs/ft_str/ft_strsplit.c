@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwillem- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/02 18:05:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/04 15:18:58 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/10 00:43:18 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,18 @@ char			**ft_strsplit(char const *s, char c)
 	char	**str;
 	size_t	i;
 	size_t	j;
+	size_t	word_q;
 
 	if (!s)
 		return (NULL);
 	i = 0;
-	j = 0;
-	if (!(str = (char **)malloc(sizeof(str) * (ft_word_quant(s, c) + 1))))
+	j = -1;
+	word_q = ft_word_quant(s, c);
+	if (!(str = (char **)malloc(sizeof(str) * (word_q + 1))))
 		return (NULL);
 	while (s[i] && s[i] == c)
-		i++;
-	while (s[i] && j < ft_word_quant(s, c))
+		++i;
+	while (s[i] && ++j < word_q)
 	{
 		str[j] = ft_wordrec(s, c, &i);
 		if (str[j] == NULL)
@@ -79,7 +81,6 @@ char			**ft_strsplit(char const *s, char c)
 			ft_freestrsplit(str, j - 1);
 			return (NULL);
 		}
-		j++;
 	}
 	str[j] = NULL;
 	return (str);

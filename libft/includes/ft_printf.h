@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/23 03:47:46 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/04 15:18:58 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/11 02:45:40 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@
 # include <wchar.h>
 # include <limits.h>
 # include <stdlib.h>
+
+# define ANSI_COLOR_RED		"\x1b[31m"
+# define ANSI_COLOR_GREEN	"\x1b[32m"
+# define ANSI_COLOR_YELLOW	"\x1b[33m"
+# define ANSI_COLOR_BLUE	"\x1b[34m"
+# define ANSI_COLOR_MAGENTA	"\x1b[35m"
+# define ANSI_COLOR_CYAN	"\x1b[36m"
+# define ANSI_COLOR_RESET	"\x1b[0m"
+# define ANSI_COLOR_WHITE	"\x1b[37m"
 
 # define MAX_BUF_SIZE	100
 # define NINF c == c + c / .0 && c < 0
