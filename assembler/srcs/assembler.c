@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 06:55:34 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/11 07:51:26 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,13 @@ int		checkform(t_all *all)
 	return (0);
 }
 
-int		last_check(t_all *all, int f)
+int		last_check(t_all *all)
 {
 	char	c;
 	char	ac;
 
 	c = COMMENT_CHAR;
 	ac = ALT_COMMENT_CHAR;
-	f ? all->line = all->pred_line : 0;
 	while (all->line[all->i])
 	{
 		if (all->line[all->i] == ' ' || all->line[all->i] == '\t' || all->line[all->i] == '\n')
@@ -117,7 +116,7 @@ void	checkname(t_all *all, int f)
 		}
 	}
 	i == length && all->line[all->i] != '"' ? ft_error(all, Semantic, CMD_size_exceeded) : ++all->i;
-	last_check(all, 0) ? ft_error(all, Syntactic, Wrong_argument) : 0;
+	last_check(all) ? ft_error(all, Syntactic, Wrong_argument) : 0;
 }
 
 int cheak_name_and_comment(t_all *all, int f)

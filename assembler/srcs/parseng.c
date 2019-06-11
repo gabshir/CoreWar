@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 06:59:07 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/11 07:46:46 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void    checkmet(t_all *all, t_type	tp, char size)
 		++all->i;
 		i = all->i;
 	}
-	while(all->line[all->i])
+	while(all->line[all->i] && all->line[all->i] != '\n')
 	{
 		j = scan_met(all); //j == 0 запрщенный символ
 		if (!j)
@@ -217,7 +217,7 @@ void		ft_parseng(t_all *all, t_op a, t_operation op)
 			!f ? ft_error(all, Syntactic, Wrong_argument) : ++j;
 		}
 	}
-	last_check(all, 0) ? ft_error(all, Syntactic, Odd_argument) : 0;
+	last_check(all) ? ft_error(all, Syntactic, Odd_argument) : 0;
 }
 
 void			tokens(t_all *all)
