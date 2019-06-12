@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 15:07:13 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 19:33:27 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,23 +76,102 @@ void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 	}
 }
 
-// int 		label_distance(t_all *all)
-// {
-// 	t_tokens	*copyscan;
-// 	int			r;
-// 	t_list		*parseng;
+int 		label_distanse_m(t_tokens *token, t_list *parseng,
+		t_all *all, t_tokens *s)
+{
+	t_tokens	*copyscan;
+	int			r;
+	int			f;
+	int			k;
 
-// 	parseng = all->parsing;
-// 	r = 0;
-// 	while (parseng)
-// 	{
-// 		copyscan = parseng->content;
+	f = 0;
+	r = 0;
+	k = 0;
+	while (parseng)
+	{
+		copyscan = parseng->content;
+		while (copyscan)
+		{
+			k += copyscan->size;
+			if (!ft_strcmp(copyscan->str, token->str)
+			&& (copyscan->tp == DIRLABEL || copyscan->tp == INDIRLABEL)
+			&& copyscan->st == s->st)
+			{
+				k = 0;
+				f = 1;
+				break ;
+			}
+			copyscan = copyscan->next;
+		}
+		r += k;
+		k = 0;
+		if (f)
+			break;
+		parseng = parseng->next;
+	}
+	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
+	return (-r);
+}
 
-// 		parseng = parseng->next;
-// 	}
-// 	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
-// 	return (r);
-// }
+int 		label_distanse_p(t_list *parseng, t_all *all, t_tokens *token)
+{
+	t_tokens	*copyscan;
+	int			r;
+	int			f;
+	char		*str;
+
+	f = 0;
+	r = 0;
+	copyscan = parseng->content;
+	str = token->str;
+	while (copyscan)
+	{
+		r += copyscan->size;
+		copyscan = copyscan->next;
+	}
+	parseng = parseng->next;
+	while (parseng)
+	{
+		copyscan = parseng->content;
+		while (copyscan)
+		{
+			r += copyscan->size;
+			if (!ft_strcmp(copyscan->str, str) && copyscan->tp == LABEL)
+			{
+				f = 1;
+				break ;
+			}
+			copyscan = copyscan->next;
+		}
+		if (f)
+			break;
+		parseng = parseng->next;
+	}
+	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
+	return (r);
+}
+
+int 		label_distance(t_tokens *token, t_all *all)
+{
+	t_tokens	*copyscan;
+	int			r;
+	t_list		*parseng;
+
+	parseng = all->parsing;
+	copyscan = parseng->content;
+	while (parseng)
+	{
+		copyscan = parseng->content;
+		if ((copyscan->st == token->st) || (!ft_strcmp(copyscan->str, token->str) && (copyscan->tp == LABEL || copyscan->tp == DIRLABEL || copyscan->tp == INDIRLABEL)))
+			break ;
+		parseng = parseng->next;
+	}
+	if (token->st > copyscan->st)
+		r = label_distanse_m(copyscan, parseng, all, token);
+	else
+		r = label_distanse_p(parseng, all, token);
+	return (r);
+}
 
 void dop_code(int s, t_all *all, size_t size)
 {
