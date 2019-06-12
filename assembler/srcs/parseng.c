@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 22:30:51 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 00:05:51 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,8 @@ int ft_dir(t_all *all, int *k, t_operation op)
 	char		size;
 
 	quick_pass(all);
-	size = op == zjmp || op == ldi || op == sti || op == ffork || op == lldi || op == lfork ? 2 : 4;
+	size = op == zjmp || op == ldi || op == sti || op == ffork
+			|| op == lldi || op == lfork ? 2 : 4;
 	if (SPLIT[all->i] != DIRECT_CHAR)
 		return (0);
 	if (SPLIT[all->i + 1] == LABEL_CHAR)
