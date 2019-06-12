@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 23:16:23 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 00:16:29 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ void	checkname(t_all *all, int f)
 			++all->st;
 		}
 	}
-	i == length && SPLIT[all->i] != '"' ? ft_error(all, Semantic, CMD_size_exceeded) : ++all->i;
+	i == length && SPLIT[all->i] != '"' ?
+	ft_error(all, Semantic, CMD_size_exceeded) : ++all->i;
 	last_check(all) ? ft_error(all, Syntactic, Wrong_argument) : 0;
 }
 
@@ -156,24 +157,28 @@ static void	copy_text(t_all *all)
 		buffer[bytes_read] = '\0';
 		champ = ft_strjoin_free(champ, buffer, 1);
 	}
-	all->split = cw_strsplit(champ);
+	if (!(all->split = cw_strsplit(champ)))
+	{
+		ft_printf("File is empty\n");
+		exit(1);
+	}
 	free(buffer);
 	free(champ);
 }
 
-static char	*change_file_extension(char *name, char *extension)
+static char	*change_file_extension(char *name)
 {
 	char	*reserved_ptr;
-	char	*new_name;
+	//char	*new_name;
 	size_t	new_len;
 
 	reserved_ptr = name;
 	new_len = ft_strlen(name) + 2;
-	SECURE_MALLOC(new_name = ft_strnew(new_len));
-	new_name = ft_strcpy(new_name, name);
+//	SECURE_MALLOC(new_name = ft_strnew(new_len));
+//	new_name = ft_strcpy(new_name, name);
 	reserved_ptr = &name[new_len - 3];
-	reserved_ptr = ft_strcpy(reserved_ptr, extension);
-	return (new_name);
+	reserved_ptr = ft_strcpy(reserved_ptr, "cor");
+	return (name);
 }
 
 static void	assembler(char *file_name)
@@ -191,13 +196,14 @@ static void	assembler(char *file_name)
 		print_errors(&all, file_name);
 	close(all.fd);
 	tmp = ft_strdup(file_name);
-	// file_name = NULL;
-	file_name = change_file_extension(file_name, "cor");
+	file_name = change_file_extension(file_name);
 	if ((all.fd = open(file_name, O_WRONLY|O_TRUNC|O_CREAT, 0644)) == -1)
 		exit(1);	//	надо будет расширить
-	file_name = change_file_extension(tmp, "s");
-	free(tmp);
-	translate_into_byte_code(&all, file_name);
+//	tmp = file_name;
+//	file_name = NULL;
+//	file_name = change_file_extension(tmp, "s");
+//	free(tmp);
+	translate_into_byte_code(&all, tmp);
 }
 
 static int  check_file_format(char *av)

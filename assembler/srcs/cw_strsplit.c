@@ -57,6 +57,8 @@ char	**cw_strsplit(char *champ)
 	size_t	line_q;
 
 	i = -1;
+	if (!champ)
+		return (NULL);
 	line_q = lines_quantity(champ);
 	SECURE_MALLOC(str = ft_memalloc(sizeof(char*) * (line_q + 1)));
 	while (++i < line_q)
