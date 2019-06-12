@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/11 11:03:56 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 14:09:23 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # define ERROR_RED			"\x1b[91;1m"
 # define ERROR_GREEN		"\x1b[92;1m"
 # define ERROR_WHITE		"\x1b[97;1m"
+
+# define SPLIT	all->split[all->st]
 
 typedef enum	e_er_type
 {
@@ -113,7 +115,7 @@ typedef struct			s_all
 	unsigned int	i;
 	unsigned int	st;
 	char			*line;
-	char			*pred_line;
+	// char			*pred_line;
 	unsigned int	magic;
 	char			prog_name[PROG_NAME_LENGTH + 1];
 	char			comment[COMMENT_LENGTH + 1];

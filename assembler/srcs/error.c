@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 11:03:48 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 14:28:37 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ int		memory_error(void)
 	return (1);
 }
 
-static t_error	*create_error(t_all *parser, t_er_type type, t_case_type reason)
+static t_error	*create_error(t_all *all, t_er_type type, t_case_type reason)
 {
 	t_error	*error;
 
 	SECURE_MALLOC(error = ft_memalloc(sizeof(t_error)));
 	error->type = type;
 	error->reason = reason;
-	error->line = ft_strdup(parser->line);
-	error->st = parser->st;
-	error->i = parser->i;
+	error->line = SPLIT;
+	error->st = all->st;
+	error->i = all->i;
 	error->next = NULL;
 	return (error);
 }
@@ -52,18 +52,6 @@ static void	error_push(t_all *parser, t_error *error)
 	else
 		parser->errors = error;	
 }
-
-// void	lexical_error(t_all *parser, char *line)
-// {
-// 	error_push(parser, create_error(parser, Lexical));
-// 	// ft_printf("line: %d, column: %d --> %s", parser->ln, parser->col, line);
-// 	// ft_printf("Lexical error");
-// }
-
-// void	semantic_error(t_all *parser, char *line)
-// {
-// 	error_push(parser, create_error(parser, Semantic));
-// }
 
 void	ft_error(t_all *all, t_er_type type, t_case_type reason/*, int er */)
 {

@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/06/11 07:04:18 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/12 14:30:02 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_op		operations(t_all *all, int *i)
 		all->i = k;
 		j = 0;
 		str = (char *)op_tab[s].cmd;
-		while (all->line[all->i] && str[j] && all->line[all->i] == str[j])
+		while (SPLIT[all->i] && str[j] && SPLIT[all->i] == str[j])
 		{
 			++all->i;
 			++j;
@@ -69,8 +69,8 @@ t_op		operations(t_all *all, int *i)
 	}
 	if (v.cmd[0])
 	{
-		if (all->line[all->i + ft_strlen((char *)v.cmd)] != ' ' &&
-		all->line[all->i + ft_strlen((char *)v.cmd)] != '\t')
+		if (SPLIT[all->i + ft_strlen((char *)v.cmd)] != ' ' &&
+		SPLIT[all->i + ft_strlen((char *)v.cmd)] != '\t')
 		{
 			ft_bzero(&v, sizeof(v));
 			i[0] = -1;

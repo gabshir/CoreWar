@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 11:04:04 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 14:23:07 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,58 +14,20 @@
 
 void	quick_pass(t_all *all)
 {
-	while(all->line[all->i] && (all->line[all->i] == ' '
-	|| all->line[all->i] == '\t'))
+	while(SPLIT[all->i] && (SPLIT[all->i] == ' ' || SPLIT[all->i] == '\t'))
 		++all->i;
 }
 
-// int		checkform(t_all *all)
-// {
-// 	int t;
-
-// 	while ((t = get_next_line(all->fd, &all->line)))
-// 	{
-// 		all->i = 0;
-// 		++all->st;
-// 		if (all->pred_line)
-// 		{
-// 			free(all->pred_line);
-// 			all->pred_line = NULL;
-// 		}
-// 		all->pred_line = ft_strdup(all->line);
-// 		while (all->line[all->i])
-// 		{
-// 			if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR)
-// 			{
-// 				free(all->line);
-// 				all->line = NULL;
-// 				break ;
-// 			}
-// 			if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
-// 				++all->i;
-// 			else
-// 				return (t);
-// 		}
-// 		if (all->line)
-// 		{
-// 			free(all->line);
-// 			all->line = NULL;
-// 		}
-// 	}
-// 	all->line = all->pred_line;
-// 	return (t);
-// }
-
 int		checkform(t_all *all)
 {	
-	while ((all->line = all->split[++all->st]))
+	while (++all->st && SPLIT)
 	{
 		all->i = 0;
-		while (all->line[all->i])
+		while (SPLIT[all->i])
 		{
-			if (all->line[all->i] == COMMENT_CHAR || all->line[all->i] == ALT_COMMENT_CHAR || all->line[all->i] == '\n')
+			if (SPLIT[all->i] == COMMENT_CHAR || SPLIT[all->i] == ALT_COMMENT_CHAR || SPLIT[all->i] == '\n')
 				break ;
-			if (all->line[all->i] == ' ' || all->line[all->i] == '\t')
+			if (SPLIT[all->i] == ' ' || SPLIT[all->i] == '\t')
 				all->i++;
 			else
 				return (1);
@@ -81,11 +43,11 @@ int		last_check(t_all *all)
 
 	c = COMMENT_CHAR;
 	ac = ALT_COMMENT_CHAR;
-	while (all->line[all->i])
+	while (SPLIT[all->i])
 	{
-		if (all->line[all->i] == ' ' || all->line[all->i] == '\t' || all->line[all->i] == '\n')
+		if (SPLIT[all->i] == ' ' || SPLIT[all->i] == '\t' || SPLIT[all->i] == '\n')
 			++all->i;
-		else if (all->line[all->i] == c || all->line[all->i] == ac)
+		else if (SPLIT[all->i] == c || SPLIT[all->i] == ac)
 			break ;
 		else
 			return (1);
@@ -102,30 +64,30 @@ void	checkname(t_all *all, int f)
 	i = 0;
 	length = f == 0 ? PROG_NAME_LENGTH : COMMENT_LENGTH;
 	quick_pass(all);
-	if (all->line[all->i] && all->line[all->i]  != '"')
+	if (SPLIT[all->i] && SPLIT[all->i]  != '"')
 	{
 		ft_error(all, Syntactic, Wrong_argument);
 		return ;
 	}
 	++all->i;
 	// all->line[all->i] && all->line[all->i]  == '"' ? ++all->i : ft_error(all, Syntactic, Wrong_argument);
-	while(i < length && all->line && all->line[all->i] != '"')
+	while(i < length && SPLIT && SPLIT[all->i] != '"')
 	{
-		f == 0 ? all->prog_name[i] = all->line[all->i] : 0;
-		f == 1 ? all->comment[i] = all->line[all->i] : 0;
+		f == 0 ? all->prog_name[i] = SPLIT[all->i] : 0;
+		f == 1 ? all->comment[i] = SPLIT[all->i] : 0;
 		++i;
 		++all->i;
-		if (!all->line[all->i])
+		if (!SPLIT[all->i])
 		{
 			all->i = 0;
-			all->line = all->split[++all->st];
+			++all->st;
 		}
 	}
-	i == length && all->line[all->i] != '"' ? ft_error(all, Semantic, CMD_size_exceeded) : ++all->i;
+	i == length && SPLIT[all->i] != '"' ? ft_error(all, Semantic, CMD_size_exceeded) : ++all->i;
 	last_check(all) ? ft_error(all, Syntactic, Wrong_argument) : 0;
 }
 
-int cheak_name_and_comment(t_all *all, int f)
+int check_name_and_comment(t_all *all, int f)
 {
 	unsigned	i;
 	unsigned	j;
@@ -136,7 +98,7 @@ int cheak_name_and_comment(t_all *all, int f)
 	str = f == 0 ? NAME_CMD_STRING : COMMENT_CMD_STRING;
 	while(str[i])
 	{
-		if (all->line[all->i] == str[i])
+		if (SPLIT[all->i] == str[i])
 		{
 			++i;
 			++all->i;
@@ -162,13 +124,13 @@ void	readfile(t_all *all)
 	while(!flags[0] || !flags[1])
 	{
 		checkform(all);
-		!all->line ? ft_error(all, Semantic, Bad_CMD_declaration) : 0;
-		if (cheak_name_and_comment(all, 0) && !flags[0])
+		!SPLIT ? ft_error(all, Semantic, Bad_CMD_declaration) : 0;
+		if (check_name_and_comment(all, 0) && !flags[0])
 		{
 			flags[0] = 1;
 			checkname(all, 0);
 		}
-		else if (cheak_name_and_comment(all, 1) && !flags[1])
+		else if (check_name_and_comment(all, 1) && !flags[1])
 		{
 			flags[1] = 1;
 			checkname(all, 1);
@@ -262,7 +224,8 @@ int main (int ac, char **av)
 	if (ac == 2 && check_file_format(av[1]))
 		assembler(av[1]);
 	else
-		ft_printf("This program compiles only .s file, \
-			and only one at a time.\n");
+		ft_printf(ERROR_GREEN "USAGE:\n");
+		ft_printf(ERROR_WHITE "This program compiles only .s file, ");
+		ft_printf("and only one at a time.\n" ANSI_COLOR_RESET);
 	return (0);
 }

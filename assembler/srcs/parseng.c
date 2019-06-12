@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 11:04:17 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 14:26:56 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ int		miniatoi(t_all *all)
 	s = 0;
 	l = 0;
 	i = all->i;
-	f = all->line[i] == '-' ? 1 : 0;
+	f = SPLIT[i] == '-' ? 1 : 0;
 	f ? ++i : 0;
-	while(all->line[i] && all->line[i] >= '0' && all->line[i] <= '9')
+	while(SPLIT[i] && SPLIT[i] >= '0' && SPLIT[i] <= '9')
 	{
-		s = s * 10 + all->line[i] - '0';
+		s = s * 10 + SPLIT[i] - '0';
 		++i;
 		l = 1;
 	}
@@ -57,7 +57,7 @@ int scan_met(t_all *all)
 	j = 0;
 	while(LABEL_CHARS[j])
 	{
-		if (all->line[all->i] != LABEL_CHARS[j])
+		if (SPLIT[all->i] != LABEL_CHARS[j])
 			++j;
 		else
 			return (1);
@@ -74,23 +74,23 @@ void    checkmet(t_all *all, t_type	tp, char size)
 
 	f = tp == LABEL ? 0 : 1; //если не метка то f == 1
 	i = all->i;
-	if (f && all->line[all->i] != LABEL_CHAR)
+	if (f && SPLIT[all->i] != LABEL_CHAR)
 		ft_error(all, Syntactic, No_colon_before);
-	else if ((f && all->line[all->i] == LABEL_CHAR))
+	else if ((f && SPLIT[all->i] == LABEL_CHAR))
 	{
 		++all->i;
 		i = all->i;
 	}
-	while(all->line[all->i] && all->line[all->i] != '\n')
+	while(SPLIT[all->i] && SPLIT[all->i] != '\n')
 	{
 		j = scan_met(all); //j == 0 запрщенный символ
 		if (!j)
 		{
-			if (!f && all->line[all->i] == LABEL_CHAR)
+			if (!f && SPLIT[all->i] == LABEL_CHAR)
 				++all->i;
-			else if ((all->line[all->i] == SEPARATOR_CHAR
-			|| all->line[all->i] == ALT_COMMENT_CHAR
-			|| all->line[all->i] == COMMENT_CHAR) && f)
+			else if ((SPLIT[all->i] == SEPARATOR_CHAR
+			|| SPLIT[all->i] == ALT_COMMENT_CHAR
+			|| SPLIT[all->i] == COMMENT_CHAR) && f)
 				break;
 			else
 				ft_error(all, Lexical, Wrong_lchar);
@@ -99,9 +99,9 @@ void    checkmet(t_all *all, t_type	tp, char size)
 		++all->i;
 	}
 	if (all->i > 0)
-		f = !f && all->line[all->i - 1] == LABEL_CHAR ? all->i - i - 1 : all->i - i;
+		f = !f && SPLIT[all->i - 1] == LABEL_CHAR ? all->i - i - 1 : all->i - i;
 	token = ft_newtokens(all, tp, -1, size);
-	token->str = ft_strsub(all->line, i, f);
+	token->str = ft_strsub(SPLIT, i, f);
 	ft_tokenspush(&all->temp, token);
 }
 
@@ -110,7 +110,7 @@ void 	sep_char(t_all *all, int k)
 	if (k > 0)
 	{
 		quick_pass(all);
-		all->line[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
+		SPLIT[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
 		quick_pass(all);
 	}
 }
@@ -122,7 +122,7 @@ int 	ft_reg(t_all *all, int *k, char size)
 	t_tokens	*token;
 
 	quick_pass(all);
-	if (all->line[all->i] != 'r')
+	if (SPLIT[all->i] != 'r')
 		return (0);
 	++all->i;
 	i = all->i;
@@ -131,7 +131,7 @@ int 	ft_reg(t_all *all, int *k, char size)
 		ft_error(all, Lexical, Incorrect_int);
 	--k[0];
 	token = ft_newtokens(all, REGISTER, -1, size);
-	token->str = ft_strsub(all->line, i, all->i - i);
+	token->str = ft_strsub(SPLIT, i, all->i - i);
 	sep_char(all, k[0]);
 	ft_tokenspush(&all->temp, token);
 	return (1);
@@ -152,9 +152,9 @@ int ft_dir(t_all *all, int *k, t_operation op)
 
 	quick_pass(all);
 	size = op == zjmp || op == ldi || op == sti || op == ffork || op == lldi || op == lfork ? 2 : 4;
-	if (all->line[all->i] != DIRECT_CHAR)
+	if (SPLIT[all->i] != DIRECT_CHAR)
 		return (0);
-	if (all->line[all->i + 1] == LABEL_CHAR)
+	if (SPLIT[all->i + 1] == LABEL_CHAR)
 	{
 		++all->i;
 		return (vn_met(all, DIRLABEL, k[0], size));
@@ -166,7 +166,7 @@ int ft_dir(t_all *all, int *k, t_operation op)
 		return (0);
 	--k[0];
 	token = ft_newtokens(all, DIRECT, -1, size);
-	token->str = ft_strsub(all->line, i, all->i - i);
+	token->str = ft_strsub(SPLIT, i, all->i - i);
 	sep_char(all, k[0]);
 	ft_tokenspush(&all->temp, token);
 	return (1);
@@ -178,7 +178,7 @@ int ft_idir(t_all *all, int *k, char size)
 	t_tokens *token;
 
 	quick_pass(all);
-	if (all->line[all->i] == LABEL_CHAR)
+	if (SPLIT[all->i] == LABEL_CHAR)
 		return (vn_met(all, INDIRLABEL, k[0], size));
 	i = all->i;
 	miniatoi(all);
@@ -186,7 +186,7 @@ int ft_idir(t_all *all, int *k, char size)
 		return (0);
 	--k[0];
 	token = ft_newtokens(all, INDIRECT, -1, size);
-	token->str = ft_strsub(all->line, i, all->i - i);
+	token->str = ft_strsub(SPLIT, i, all->i - i);
 	sep_char(all, k[0]);
 	ft_tokenspush(&all->temp, token);
 	return (1);
@@ -204,7 +204,7 @@ void		ft_parseng(t_all *all, t_op a, t_operation op)
 	all->i += ft_strlen((char *)a.cmd);
 	while (j < 3)
 	{
-		all->line[all->i] == SEPARATOR_CHAR ? ++all->i : 0;
+		SPLIT[all->i] == SEPARATOR_CHAR ? ++all->i : 0;
 		f = 0;
 		if (!a.arg_type[j])
 			++j;
@@ -237,7 +237,7 @@ void			tokens(t_all *all)
 		checkmet(all, LABEL, 0);
 		i = -1;
 		quick_pass(all);
-		if (!all->line[all->i] || all->line[all->i] == '\n')
+		if (!SPLIT[all->i] || SPLIT[all->i] == '\n')
 		{
 			ft_lstpush(&all->parsing, ft_lstnew_ptr(all->temp));
 			all->temp = NULL;
@@ -260,7 +260,7 @@ void	parseng(t_all *all)
 	
 	while (checkform(all))
 	{
-		if (all->line)
+		if (SPLIT)
 		{
 			quick_pass(all);
 			tokens(all);
@@ -270,9 +270,8 @@ void	parseng(t_all *all)
 	}
 	--all->st;
 	last_line_len = ft_strlen(all->split[all->st]);
-	if (all->split[all->st][last_line_len - 1] != '\n')
+	if (SPLIT[last_line_len - 1] != '\n')
 	{
-		all->line = all->split[all->st];
 		all->i = last_line_len - 1;
 		ft_error(all, Syntactic, No_last_line);
 	}
