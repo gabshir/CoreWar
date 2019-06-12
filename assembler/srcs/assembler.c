@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 14:23:07 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 14:36:53 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,6 @@ static char	*change_file_extension(char *name)
 static void	assembler(char *file_name)
 {
 	t_all	all;
-	// t_tokens *read;
 
 	ft_bzero(&all, sizeof(all));
 	all.st = -1;

@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 14:26:56 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 14:38:37 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ void    checkmet(t_all *all, t_type	tp, char size)
 				++all->i;
 			else if ((SPLIT[all->i] == SEPARATOR_CHAR
 			|| SPLIT[all->i] == ALT_COMMENT_CHAR
-			|| SPLIT[all->i] == COMMENT_CHAR) && f)
+			|| SPLIT[all->i] == COMMENT_CHAR || SPLIT[all->i] == '\n'
+			|| SPLIT[all->i] == '\t') && f)
 				break;
 			else
 				ft_error(all, Lexical, Wrong_lchar);
