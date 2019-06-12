@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/12 14:09:23 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 14:33:59 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ typedef struct			s_all
 	char			**split;
 	unsigned int	i;
 	unsigned int	st;
-	char			*line;
+	// char			*line;
 	// char			*pred_line;
 	unsigned int	magic;
 	char			prog_name[PROG_NAME_LENGTH + 1];
