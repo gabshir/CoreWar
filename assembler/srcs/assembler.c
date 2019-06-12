@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 22:25:28 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 22:31:03 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,17 +189,6 @@ static void	assembler(char *file_name)
 	parseng(&all);
 	if (all.errors)
 		print_errors(&all, file_name);
-//	while(all.parsing)	//	start debug
-//	{
-//		read = all.parsing->content;
-//		while(read)
-//		{
-//			ft_printf("%s ", read->str);
-//			read = read->next;
-//		}
-//		ft_printf("\n");
-//		all.parsing = all.parsing->next;
-//	}	//	finish debug
 	close(all.fd);
 	file_name = change_file_extension(file_name, "cor");
 	if ((all.fd = open(file_name, O_WRONLY|O_TRUNC|O_CREAT, 0644)) == -1)
