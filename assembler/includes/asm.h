@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/12 22:11:15 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 23:13:49 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef enum	e_case_type
 	No_comma,
 	Unknown_instr,
 	No_last_line,
-	Label_not_found
+	Label_not_found,
+	Empty_file
 }				t_case_type;
 
 typedef struct	s_error
