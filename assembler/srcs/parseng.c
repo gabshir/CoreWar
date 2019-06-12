@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 19:38:31 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 21:42:42 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,21 @@ int scan_met(t_all *all)
 	return (0);
 }
 
-void    checkmet(t_all *all, t_type	tp, char size)
+static int	check_label_colon(t_all *all)
+{
+	unsigned	tmp_i;
+	
+	tmp_i = all->i;
+	while (SPLIT[tmp_i])
+	{
+		if (SPLIT[tmp_i] == LABEL_CHAR)
+			return (1);
+		++tmp_i;
+	}
+	return (0);
+}
+
+void    checkmet(t_all *all, t_type	tp, char size, int *incorrect_lbl)
 {
 	unsigned		j;
 	unsigned 		i;
@@ -93,7 +107,7 @@ void    checkmet(t_all *all, t_type	tp, char size)
 			|| SPLIT[all->i] == COMMENT_CHAR || SPLIT[all->i] == '\n'
 			|| SPLIT[all->i] == '\t') && f)
 				break;
-			else
+			else if ((*incorrect_lbl = check_label_colon(all)))
 				ft_error(all, Lexical, Wrong_lchar);
 			break ;
 		}
@@ -140,7 +154,7 @@ int 	ft_reg(t_all *all, int *k, char size)
 
 int vn_met(t_all *all, t_type tp, int k, char size)
 {
-	checkmet(all, tp, size);
+	checkmet(all, tp, size, 0);
 	sep_char(all, k);
 	return (1);
 }
@@ -229,14 +243,17 @@ void			tokens(t_all *all)
 	t_op		a;
 	t_tokens	*token;
 	int			i;
-	char 		size;
+	// char 		size;
+	int			size;
+	int			incorrect_lbl;
 
 	quick_pass(all);
 	i = -1;
 	a = operations(all, &i);
 	if (!a.cmd[0])
 	{
-		checkmet(all, LABEL, 0);
+		size = all->i;
+		checkmet(all, LABEL, 0, &incorrect_lbl);
 		i = -1;
 		quick_pass(all);
 		if (!SPLIT[all->i] || SPLIT[all->i] == '\n')
@@ -247,9 +264,15 @@ void			tokens(t_all *all)
 		}
 		a = operations(all, &i);
 	}
-	!a.cmd[0] ? ft_error(all, Syntactic, Unknown_instr) : 0;
+	if (!a.cmd[0] && !incorrect_lbl)
+	{
+		ft_uniswap(&all->i, &size, sizeof(int));
+		ft_error(all, Syntactic, Unknown_instr);
+		all->i = size;
+	}
+	// !a.cmd[0] ? ft_error(all, Syntactic, Unknown_instr) : 0;
 	size = i == live || i == zjmp || i == ffork || i == lfork || i == aff ? 1 : 2;
-	token = ft_newtokens(all, INSTRUCTION, i, size);
+	token = ft_newtokens(all, INSTRUCTION, i, (char)size);
 	token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
 	ft_tokenspush(&all->temp, token);
 	if (a.cmd[0])

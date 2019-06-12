@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/12 14:40:31 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/12 21:01:29 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,14 @@ typedef    enum    e_operation
 
 typedef struct			s_tokens
 {
-	char 				*str;
-	unsigned int		st;
-	unsigned int		i;
-	t_type				tp;
-	t_operation			operation;
-	char				size;
-	unsigned int		t_r;
-	struct 	s_tokens *next;
+	char 			*str;
+	unsigned int	st;
+	unsigned int	i;
+	t_type			tp;
+	t_operation		operation;
+	char			size;
+	unsigned int	t_r;
+	struct s_tokens	*next;
 }						t_tokens;
 
 

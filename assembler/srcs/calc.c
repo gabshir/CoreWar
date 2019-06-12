@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 19:33:27 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 20:18:07 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ void		operation_to_bytecode(t_all *all)
 				dop_code(ft_atoi(copytoken->str), all, copytoken->size);
 			else if (copytoken->tp == DIRLABEL || copytoken->tp == INDIRLABEL)
 			{
-				r = 1/*label_distance(copytoken, all)*/;
+				r = label_distance(copytoken, all);
 				dop_code(r, all, copytoken->size);
 			}
 			copytoken = copytoken->next;

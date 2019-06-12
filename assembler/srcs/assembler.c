@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 19:33:09 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 20:45:38 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,11 +117,8 @@ int check_name_and_comment(t_all *all, int f)
 void	readfile(t_all *all, char *file_name)
 {
 	char	flags[2];
-	// unsigned int	*coords[2];
 
 	ft_bzero(&flags, 2);
-	// coords[0] = &all->st;
-	// coords[1] = &all->i;
 	all->magic = COREWAR_EXEC_MAGIC;
 	while(!flags[0] || !flags[1])
 	{
