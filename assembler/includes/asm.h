@@ -146,6 +146,6 @@ int			memory_error(void);
 
 // void		assembler(t_all *all);
 char		**cw_strsplit(char *champ);
-void		translate_into_byte_code(t_all *all);
+void		translate_into_byte_code(t_all *all, char *file_name);
 
 #endif
