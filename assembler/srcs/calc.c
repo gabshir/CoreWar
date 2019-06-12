@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 20:08:26 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/12 21:22:00 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	translate_to_bytecode(t_all *all, size_t size, unsigned l)
 	k = size;
 	while (size)
 	{
-		c = (uint8_t)((l >> i) & 0xFF);
+		c = (char)((l >> i) & 0xFF);
 		all->source[all->i + size - 1] = c;
 		i += 8;
 		--size;
@@ -76,6 +76,21 @@ void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 	}
 }
 
+int 		label_distanse_mp(t_tokens *token, t_tokens *copyscan,
+		int *k, t_tokens *s)
+{
+	int f;
+
+	f = 0;
+	if (!ft_strcmp(copyscan->str, token->str) && (copyscan->tp == DIRLABEL
+	|| copyscan->tp == INDIRLABEL) && copyscan->st == s->st)
+		{
+			k[0] = 0;
+			f = 1;
+		}
+	return (f);
+}
+
 int 		label_distanse_m(t_tokens *token, t_list *parseng,
 		t_all *all, t_tokens *s)
 {
@@ -93,14 +108,8 @@ int 		label_distanse_m(t_tokens *token, t_list *parseng,
 		while (copyscan)
 		{
 			k += copyscan->size;
-			if (!ft_strcmp(copyscan->str, token->str)
-			&& (copyscan->tp == DIRLABEL || copyscan->tp == INDIRLABEL)
-			&& copyscan->st == s->st)
-			{
-				k = 0;
-				f = 1;
+			if ((f = label_distanse_mp(token, copyscan, &k, s)))
 				break ;
-			}
 			copyscan = copyscan->next;
 		}
 		r += k;
@@ -162,7 +171,9 @@ int 		label_distance(t_tokens *token, t_all *all)
 	while (parseng)
 	{
 		copyscan = parseng->content;
-		if ((copyscan->st == token->st) || (!ft_strcmp(copyscan->str, token->str) && (copyscan->tp == LABEL || copyscan->tp == DIRLABEL || copyscan->tp == INDIRLABEL)))
+		if ((copyscan->st == token->st)
+		|| (!ft_strcmp(copyscan->str, token->str) && (copyscan->tp == LABEL
+		|| copyscan->tp == DIRLABEL || copyscan->tp == INDIRLABEL)))
 			break ;
 		parseng = parseng->next;
 	}
@@ -217,7 +228,7 @@ void		operation_to_bytecode(t_all *all)
 				dop_code(ft_atoi(copytoken->str), all, copytoken->size);
 			else if (copytoken->tp == DIRLABEL || copytoken->tp == INDIRLABEL)
 			{
-				r = 1/*label_distance(copytoken, all)*/;
+				r = label_distance(copytoken, all);
 				dop_code(r, all, copytoken->size);
 			}
 			copytoken = copytoken->next;
@@ -248,7 +259,7 @@ unsigned	size_soure(t_list *parseng)
 }
 
 
-void		translate_into_byte_code(t_all *all)
+void		translate_into_byte_code(t_all *all, )
 {
 	unsigned	size;
 
@@ -262,5 +273,7 @@ void		translate_into_byte_code(t_all *all)
 	translate_to_bytecode(all, 4, all->prog_size);
 	name_and_comment(all, 0);
 	operation_to_bytecode(all);
+	if (all->errors)
+		print_errors(&all, file_name);
 	write(all->fd, all->source, size);
 }
