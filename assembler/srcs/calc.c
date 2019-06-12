@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 17:47:50 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/12 19:15:04 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 	}
 }
 
-int 		label_distanse_m(t_tokens *token, t_list *parseng, t_all *all)
+int 		label_distanse_m(t_tokens *token, t_list *parseng, t_all *all, t_tokens *s)
 {
 	t_tokens	*copyscan;
 	int			r;
@@ -92,7 +92,9 @@ int 		label_distanse_m(t_tokens *token, t_list *parseng, t_all *all)
 		while (copyscan)
 		{
 			k += copyscan->size;
-			if (!ft_strcmp(copyscan->str, token->str) && copyscan->tp != LABEL)
+			if (!ft_strcmp(copyscan->str, token->str)
+			&& (copyscan->tp == DIRLABEL || copyscan->tp == INDIRLABEL)
+			&& copyscan->st == s->st)
 			{
 				k = 0;
 				f = 1;
@@ -159,12 +161,12 @@ int 		label_distance(t_tokens *token, t_all *all)
 	while (parseng)
 	{
 		copyscan = parseng->content;
-		if (copyscan->st == token->st || !ft_strcmp(copyscan->str, token->str))
+		if ((copyscan->st == token->st) || (!ft_strcmp(copyscan->str, token->str) && (copyscan->tp == LABEL || copyscan->tp == DIRLABEL || copyscan->tp == INDIRLABEL)))
 			break ;
 		parseng = parseng->next;
 	}
 	if (token->st > copyscan->st)
-		r = label_distanse_m(copyscan, parseng, all);
+		r = label_distanse_m(copyscan, parseng, all, token);
 	else
 		r = label_distanse_p(parseng, all, token);
 	return (r);
@@ -183,7 +185,9 @@ void dop_code(int s, t_all *all, size_t size)
 		all->source[all->i - 2] =~ all->source[all->i - 2];
 		c =~ all->source[all->i - 1];
 		if (c == 0xff)
+		{
 			all->source[all->i - 2] += 1;
+		}
 		c += 1;
 		all->source[all->i - 1] = c;
 	}
