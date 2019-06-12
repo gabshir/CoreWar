@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 14:32:05 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/12 15:07:13 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,29 +76,28 @@ void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 	}
 }
 
-int 		label_distance(t_tokens *token, t_all *all)
-{
-	t_tokens	*copyscan;
-	int			r;
-	t_list		*parseng;
-	t_tokens	*test;
+// int 		label_distance(t_all *all)
+// {
+// 	t_tokens	*copyscan;
+// 	int			r;
+// 	t_list		*parseng;
 
-	parseng = all->parsing;
-	r = 0;
-	while (parseng)
-	{
-		copyscan = parseng->content;
+// 	parseng = all->parsing;
+// 	r = 0;
+// 	while (parseng)
+// 	{
+// 		copyscan = parseng->content;
 
-		parseng = parseng->next;
-	}
-	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
-	return (r);
-}
+// 		parseng = parseng->next;
+// 	}
+// 	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
+// 	return (r);
+// }
 
 void dop_code(int s, t_all *all, size_t size)
 {
-	int		f;
-	char	c;
+	int				f;
+	unsigned char	c;
 
 	f = s < 0 ? 1 : 0;
 	s < 0 ? s = -s  : 0;
@@ -139,7 +138,7 @@ void		operation_to_bytecode(t_all *all)
 				dop_code(ft_atoi(copytoken->str), all, copytoken->size);
 			else if (copytoken->tp == DIRLABEL || copytoken->tp == INDIRLABEL)
 			{
-				r = label_distance(copytoken, all);
+				r = 1/*label_distance(copytoken, all)*/;
 				dop_code(r, all, copytoken->size);
 			}
 			copytoken = copytoken->next;
