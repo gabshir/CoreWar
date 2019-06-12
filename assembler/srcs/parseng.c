@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 19:38:31 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 20:08:34 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ void 	sep_char(t_all *all, int k)
 	if (k > 0)
 	{
 		quick_pass(all);
-		SPLIT[all->i] != SEPARATOR_CHAR ? ft_error(all, Syntactic, No_comma) : ++all->i;
+		SPLIT[all->i] != SEPARATOR_CHAR ?
+		ft_error(all, Syntactic, No_comma) : ++all->i;
 		quick_pass(all);
 	}
 }
