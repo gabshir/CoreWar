@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 17:22:34 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/12 17:47:50 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int 		label_distanse_m(t_tokens *token, t_list *parseng, t_all *all)
 	return (-r);
 }
 
-int 		label_distanse_p(t_list *parseng, t_all *all)
+int 		label_distanse_p(t_list *parseng, t_all *all, t_tokens *token)
 {
 	t_tokens	*copyscan;
 	int			r;
@@ -120,12 +120,10 @@ int 		label_distanse_p(t_list *parseng, t_all *all)
 	f = 0;
 	r = 0;
 	copyscan = parseng->content;
-	str = NULL;
+	str = token->str;
 	while (copyscan)
 	{
 		r += copyscan->size;
-		if (copyscan->tp == DIRLABEL || copyscan->tp == INDIRLABEL)
-			str = copyscan->str;
 		copyscan = copyscan->next;
 	}
 	parseng = parseng->next;
@@ -168,7 +166,7 @@ int 		label_distance(t_tokens *token, t_all *all)
 	if (token->st > copyscan->st)
 		r = label_distanse_m(copyscan, parseng, all);
 	else
-		r = label_distanse_p(parseng, all);
+		r = label_distanse_p(parseng, all, token);
 	return (r);
 }
 
