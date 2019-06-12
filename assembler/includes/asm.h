@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/12 21:01:29 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 22:11:15 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,6 @@ int			memory_error(void);
 
 // void		assembler(t_all *all);
 char		**cw_strsplit(char *champ);
-void		translate_into_byte_code(t_all *all);
+void		translate_into_byte_code(t_all *all, char *file_name);
 
 #endif

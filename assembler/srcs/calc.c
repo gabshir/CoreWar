@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 20:18:07 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 22:11:03 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ unsigned	size_soure(t_list *parseng)
 }
 
 
-void		translate_into_byte_code(t_all *all)
+void		translate_into_byte_code(t_all *all, char *file_name)
 {
 	unsigned	size;
 
@@ -262,5 +262,7 @@ void		translate_into_byte_code(t_all *all)
 	translate_to_bytecode(all, 4, all->prog_size);
 	name_and_comment(all, 0);
 	operation_to_bytecode(all);
+	if (all->errors)
+		print_errors(all, file_name);
 	write(all->fd, all->source, size);
 }

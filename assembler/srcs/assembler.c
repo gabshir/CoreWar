@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 20:45:38 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 22:25:28 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ static void	copy_text(t_all *all)
 	free(champ);
 }
 
-static char	*change_file_extension(char *name)
+static char	*change_file_extension(char *name, char *extension)
 {
 	char	*reserved_ptr;
 	char	*new_name;
@@ -172,13 +172,14 @@ static char	*change_file_extension(char *name)
 	SECURE_MALLOC(new_name = ft_strnew(new_len));
 	new_name = ft_strcpy(new_name, name);
 	reserved_ptr = &name[new_len - 3];
-	reserved_ptr = ft_strcpy(reserved_ptr, "cor");
-	return (name);
+	reserved_ptr = ft_strcpy(reserved_ptr, extension);
+	return (new_name);
 }
 
 static void	assembler(char *file_name)
 {
 	t_all	all;
+	char	*tmp;
 
 	ft_bzero(&all, sizeof(all));
 	all.st = -1;
@@ -200,10 +201,14 @@ static void	assembler(char *file_name)
 //		all.parsing = all.parsing->next;
 //	}	//	finish debug
 	close(all.fd);
-	file_name = change_file_extension(file_name);
+	file_name = change_file_extension(file_name, "cor");
 	if ((all.fd = open(file_name, O_WRONLY|O_TRUNC|O_CREAT, 0644)) == -1)
 		exit(1);	//	надо будет расширить
-	translate_into_byte_code(&all);
+	tmp = file_name;
+	file_name = NULL;
+	file_name = change_file_extension(tmp, "s");
+	free(tmp);
+	translate_into_byte_code(&all, file_name);
 }
 
 static int  check_file_format(char *av)
