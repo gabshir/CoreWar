@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 14:36:53 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 19:11:16 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ void	quick_pass(t_all *all)
 }
 
 int		checkform(t_all *all)
-{	
-	while (++all->st && SPLIT)
+{
+	while (all->split[all->st + 1])
 	{
+		++all->st;
 		all->i = 0;
 		while (SPLIT[all->i])
 		{
@@ -32,6 +33,7 @@ int		checkform(t_all *all)
 			else
 				return (1);
 		}
+		// ++all->st;
 	}
 	return (0);
 }
@@ -112,7 +114,7 @@ int check_name_and_comment(t_all *all, int f)
 	return (0);
 }
 
-void	readfile(t_all *all)
+void	readfile(t_all *all, char *file_name)
 {
 	char	flags[2];
 	// unsigned int	*coords[2];
@@ -137,12 +139,8 @@ void	readfile(t_all *all)
 		}
 		else
 		{
-			// if (!flags[0] && !flags[1])
-			// {
-				
-			// }
 			ft_error(all, Semantic, Bad_CMD_declaration);
-			break ;
+			print_errors(all, file_name);
 		}
 	}
 	// ft_printf("%s\n%s\n", all->prog_name, all->comment);
@@ -152,12 +150,17 @@ static void	copy_text(t_all *all)
 {
 	char	*buffer;
 	char	*champ;
+	int		bytes_read;
 
 	SECURE_MALLOC(buffer = ft_strnew(MEM_SIZE));
 	champ = NULL;
-	while (read(all->fd, buffer, MEM_SIZE) > 0)
-		champ = ft_strjoin_free(champ, buffer, 3);
+	while ((bytes_read = read(all->fd, buffer, MEM_SIZE)) > 0)
+	{
+		buffer[bytes_read] = '\0';
+		champ = ft_strjoin_free(champ, buffer, 1);
+	}
 	all->split = cw_strsplit(champ);
+	free(buffer);
 	free(champ);
 }
 
@@ -184,7 +187,7 @@ static void	assembler(char *file_name)
 	all.st = -1;
 	all.fd = ft_read_file(file_name);
 	copy_text(&all);
-	readfile(&all);
+	readfile(&all, file_name);
 	parseng(&all);
 	if (all.errors)
 		print_errors(&all, file_name);
@@ -223,8 +226,10 @@ int main (int ac, char **av)
 	if (ac == 2 && check_file_format(av[1]))
 		assembler(av[1]);
 	else
+	{
 		ft_printf(ERROR_GREEN "USAGE:\n");
 		ft_printf(ERROR_WHITE "This program compiles only .s file, ");
 		ft_printf("and only one at a time.\n" ANSI_COLOR_RESET);
+	}
 	return (0);
 }

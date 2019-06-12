@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 14:28:37 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 19:20:39 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,10 @@ static char	*put_caret(t_error *error)
 	i = -1;
 	while (error->line[++i])
 	{
-		if (error->line[i] == '\t')
-			caret[i] = '\t';
-		else if (i == error->i)
+		if (i == error->i)
 			caret[i] = '^';
+		else if (error->line[i] == '\t')
+			caret[i] = '\t';
 		else
 			caret[i] = ' ';
 	}

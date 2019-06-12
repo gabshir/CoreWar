@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/12 14:38:37 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/12 19:13:24 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,8 @@ void		ft_parseng(t_all *all, t_op a, t_operation op)
 			!f && v[1] == 1 ? f = ft_dir(all, &k, op) : 0;
 			!f && v[2] == 1 ? f = ft_reg(all, &k, T_REG) : 0;
 			free(v);
-			!f ? ft_error(all, Syntactic, Wrong_argument) : ++j;
+			!f ? ft_error(all, Syntactic, Wrong_argument) : 0;
+			++j;
 		}
 	}
 	last_check(all) ? ft_error(all, Syntactic, Odd_argument) : 0;
@@ -269,7 +270,6 @@ void	parseng(t_all *all)
 			all->temp = NULL;
 		}
 	}
-	--all->st;
 	last_line_len = ft_strlen(all->split[all->st]);
 	if (SPLIT[last_line_len - 1] != '\n')
 	{
