@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 00:05:51 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 04:05:29 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,13 @@ int scan_met(t_all *all)
 	return (0);
 }
 
-static int	check_label_colon(t_all *all)
+static int	check_label_colon(t_all *all, unsigned i)
 {
 	unsigned	tmp_i;
 	
 	tmp_i = all->i;
+	if (SPLIT[i - 1] == LABEL_CHAR)
+		return (1);
 	while (SPLIT[tmp_i])
 	{
 		if (SPLIT[tmp_i] == LABEL_CHAR)
@@ -107,8 +109,13 @@ void    checkmet(t_all *all, t_type	tp, char size, int *incorrect_lbl)
 			|| SPLIT[all->i] == COMMENT_CHAR || SPLIT[all->i] == '\n'
 			|| SPLIT[all->i] == '\t') && f)
 				break;
-			else if ((*incorrect_lbl = check_label_colon(all)))
+			else if ((*incorrect_lbl = check_label_colon(all, i)))
+			{
 				ft_error(all, Lexical, Wrong_lchar);
+				while (SPLIT[all->i] && SPLIT[all->i] != ',' && 
+					SPLIT[all->i] != ' ' && SPLIT[all->i] != '\t')
+					++all->i;
+			}
 			break ;
 		}
 		++all->i;
@@ -155,7 +162,9 @@ int 	ft_reg(t_all *all, int *k, char size)
 
 int vn_met(t_all *all, t_type tp, int k, char size)
 {
-	checkmet(all, tp, size, 0);
+	int	incorrect_lbl;
+	
+	checkmet(all, tp, size, &incorrect_lbl);
 	sep_char(all, k);
 	return (1);
 }
@@ -209,6 +218,7 @@ int ft_idir(t_all *all, int *k, char size)
 	return (1);
 }
 
+
 void		ft_parseng(t_all *all, t_op a, t_operation op)
 {
 	char		*v;
@@ -233,7 +243,13 @@ void		ft_parseng(t_all *all, t_op a, t_operation op)
 			!f && v[1] == 1 ? f = ft_dir(all, &k, op) : 0;
 			!f && v[2] == 1 ? f = ft_reg(all, &k, T_REG) : 0;
 			free(v);
-			!f ? ft_error(all, Syntactic, Wrong_argument) : 0;
+			if (!f)
+			{
+				ft_error(all, Syntactic, Wrong_argument);
+				while (SPLIT[all->i] && SPLIT[all->i] != ',' && 
+					SPLIT[all->i] != ' ' && SPLIT[all->i] != '\t')
+					++all->i;
+			}
 			++j;
 		}
 	}
@@ -254,7 +270,6 @@ void			tokens(t_all *all)
 	a = operations(all, &i);
 	if (!a.cmd[0])
 	{
-		size = all->i;
 		checkmet(all, LABEL, 0, &incorrect_lbl);
 		i = -1;
 		quick_pass(all);
@@ -264,6 +279,7 @@ void			tokens(t_all *all)
 			all->temp = NULL;
 			return ;
 		}
+		size = all->i;
 		a = operations(all, &i);
 	}
 	if (!a.cmd[0] && !incorrect_lbl)
@@ -272,7 +288,6 @@ void			tokens(t_all *all)
 		ft_error(all, Syntactic, Unknown_instr);
 		all->i = size;
 	}
-	// !a.cmd[0] ? ft_error(all, Syntactic, Unknown_instr) : 0;
 	size = i == live || i == zjmp || i == ffork || i == lfork || i == aff ? 1 : 2;
 	token = ft_newtokens(all, INSTRUCTION, i, (char)size);
 	token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
@@ -295,7 +310,7 @@ void	parseng(t_all *all)
 			all->temp = NULL;
 		}
 	}
-	last_line_len = ft_strlen(all->split[all->st]);
+	last_line_len = ft_strlen(SPLIT);
 	if (SPLIT[last_line_len - 1] != '\n')
 	{
 		all->i = last_line_len - 1;

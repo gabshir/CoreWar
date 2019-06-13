@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 00:17:01 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 02:58:29 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	error_push(t_all *parser, t_error *error)
 		parser->errors = error;	
 }
 
-void	ft_error(t_all *all, t_er_type type, t_case_type reason/*, int er */)
+void	ft_error(t_all *all, t_er_type type, t_case_type reason)
 {
 	if (type == Lexical)
 		error_push(all, create_error(all, Lexical, reason));
@@ -91,7 +91,7 @@ static char	*get_reason_str(t_case_type reason)
 	else if (reason == No_last_line)
 		reas = "No last LINE FEED found";
 	else if (reason == Label_not_found)
-		reas = "Label_not_found";
+		reas = "Label linked as an argument is not found";
 	return (reas);
 }
 
@@ -105,7 +105,12 @@ static char	*put_caret(t_error *error)
 	while (error->line[++i])
 	{
 		if (i == error->i)
+		{
 			caret[i] = '^';
+			if (error->reason == Odd_argument)
+				while (error->line[++i])
+					caret[i] = '~';
+		}
 		else if (error->line[i] == '\t')
 			caret[i] = '\t';
 		else

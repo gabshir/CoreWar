@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 18:37:16 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 00:16:29 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 01:05:08 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ int		checkform(t_all *all)
 		all->i = 0;
 		while (SPLIT[all->i])
 		{
-			if (SPLIT[all->i] == COMMENT_CHAR || SPLIT[all->i] == ALT_COMMENT_CHAR || SPLIT[all->i] == '\n')
+			if (SPLIT[all->i] == COMMENT_CHAR || 
+				SPLIT[all->i] == ALT_COMMENT_CHAR || SPLIT[all->i] == '\n')
 				break ;
 			if (SPLIT[all->i] == ' ' || SPLIT[all->i] == '\t')
 				all->i++;
 			else
 				return (1);
 		}
-		// ++all->st;
 	}
 	return (0);
 }
@@ -168,16 +168,10 @@ static void	copy_text(t_all *all)
 
 static char	*change_file_extension(char *name)
 {
-	char	*reserved_ptr;
-	//char	*new_name;
-	size_t	new_len;
+	char	*ext_ptr;
 
-	reserved_ptr = name;
-	new_len = ft_strlen(name) + 2;
-//	SECURE_MALLOC(new_name = ft_strnew(new_len));
-//	new_name = ft_strcpy(new_name, name);
-	reserved_ptr = &name[new_len - 3];
-	reserved_ptr = ft_strcpy(reserved_ptr, "cor");
+	ext_ptr = &name[ft_strlen(name) - 1];
+	ext_ptr = ft_strcpy(ext_ptr, "cor");
 	return (name);
 }
 
@@ -199,11 +193,8 @@ static void	assembler(char *file_name)
 	file_name = change_file_extension(file_name);
 	if ((all.fd = open(file_name, O_WRONLY|O_TRUNC|O_CREAT, 0644)) == -1)
 		exit(1);	//	надо будет расширить
-//	tmp = file_name;
-//	file_name = NULL;
-//	file_name = change_file_extension(tmp, "s");
-//	free(tmp);
 	translate_into_byte_code(&all, tmp);
+	free(tmp);
 }
 
 static int  check_file_format(char *av)

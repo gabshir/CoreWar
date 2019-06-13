@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 00:16:45 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 01:22:03 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,12 @@ int 		label_distanse_m(t_tokens *token, t_list *parseng,
 			break;
 		parseng = parseng->next;
 	}
-	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
+	if (!parseng)
+	{
+		all->i = s->i - ft_strlen(s->str);
+		all->st = s->st;
+		ft_error(all, Semantic, Label_not_found);
+	}
 	return (-r);
 }
 
@@ -156,7 +161,13 @@ int 		label_distanse_p(t_list *parseng, t_all *all, t_tokens *token)
 			break;
 		parseng = parseng->next;
 	}
-	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
+	if (!parseng)
+	{
+		all->i = token->i - ft_strlen(token->str);
+		all->st = token->st;
+		ft_error(all, Semantic, Label_not_found);
+	}
+	//!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
 	return (r);
 }
 
@@ -275,5 +286,8 @@ void		translate_into_byte_code(t_all *all, char *file_name)
 	operation_to_bytecode(all);
 	if (all->errors)
 		print_errors(all, file_name);
+	ft_putstr("Writing output program to ");
+	write(1, file_name, ft_strlen(file_name) - 1);
+	write(1, "cor\n", 4);
 	write(all->fd, all->source, size);
 }
