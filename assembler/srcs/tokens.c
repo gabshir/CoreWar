@@ -24,7 +24,6 @@ t_tokens	*ft_newtokens(t_all *all, t_type tp, int o, char size)
 	new->i = all->i;
 	new->tp = tp;
 	new->operation = o;
-	new->t_r = 0;
 	new->size = size;
 	return (new);
 }

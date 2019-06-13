@@ -18,7 +18,8 @@ FLAGS = -Wall -Wextra -Werror -g
 SRCDIR = srcs/
 OBJDIR = obj/
 
-FILES = assembler	error	op	parseng		tokens	cw_strsplit		calc
+FILES = assembler	error	op	parseng		tokens	cw_strsplit		calc	\
+		lable_distanse	operation_to_bytecode
 OBJ = $(addprefix $(OBJDIR),$(addsuffix .o,$(FILES)))
 
 LIBFT = ../libft/libftprintf.a
