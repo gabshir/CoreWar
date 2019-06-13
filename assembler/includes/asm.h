@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/13 04:55:19 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 05:00:01 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,6 @@ void		unknown_label_error(t_all *all, t_tokens *token);
 
 t_tokens	*ft_newtokens(t_all *all, t_type tp, int o, char size);
 void		ft_tokenspush(t_tokens **alst, t_tokens *new);
-void		ft_tokensadd(t_tokens **alst, t_tokens *new);
 
 void		parseng(t_all *all);
 t_op		operations(t_all *all, int *i);

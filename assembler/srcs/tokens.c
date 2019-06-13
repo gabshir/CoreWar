@@ -6,7 +6,7 @@
 /*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 17:49:19 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/11 07:04:18 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 03:51:50 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,4 @@ void	ft_tokenspush(t_tokens **alst, t_tokens *new)
 	}
 	else
 		*alst = new;
-}
-
-void	ft_tokensadd(t_tokens **alst, t_tokens *new)
-{
-	if (alst && new)
-	{
-		if (*alst)
-			new->next = *alst;
-		*alst = new;
-	}
 }
