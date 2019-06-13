@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/13 00:17:34 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 03:49:06 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef enum	e_case_type
 	Unknown_instr,
 	No_last_line,
 	Label_not_found,
-	Empty_file
 }				t_case_type;
 
 typedef struct	s_error
@@ -96,7 +95,6 @@ typedef struct			s_tokens
 	t_type			tp;
 	t_operation		operation;
 	char			size;
-	unsigned int	t_r;
 	struct s_tokens	*next;
 }						t_tokens;
 
@@ -148,5 +146,9 @@ int			memory_error(void);
 // void		assembler(t_all *all);
 char		**cw_strsplit(char *champ);
 void		translate_into_byte_code(t_all *all, char *file_name);
+
+int 		label_distance(t_tokens *token, t_all *all);
+void		translate_to_bytecode(t_all *all, size_t size, unsigned l);
+void		operation_to_bytecode(t_all *all);
 
 #endif
