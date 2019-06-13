@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/13 04:48:55 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 04:55:19 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,6 @@ typedef struct			s_all
 	char			**split;
 	unsigned int	i;
 	unsigned int	st;
-	// char			*line;
-	// char			*pred_line;
 	unsigned int	magic;
 	char			prog_name[PROG_NAME_LENGTH + 1];
 	char			comment[COMMENT_LENGTH + 1];
@@ -165,5 +163,6 @@ void		translate_into_byte_code(t_all *all, char *file_name);
 int 		label_distance(t_tokens *token, t_all *all);
 void		translate_to_bytecode(t_all *all, size_t size, unsigned l);
 void		operation_to_bytecode(t_all *all);
+void		global_free(t_all *all);
 
 #endif

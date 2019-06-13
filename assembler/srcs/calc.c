@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 04:11:01 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 04:15:08 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,5 @@ void		translate_into_byte_code(t_all *all, char *file_name)
 	write(1, file_name, ft_strlen(file_name) - 1);
 	write(1, "cor\n", 4);
 	write(all->fd, all->source, size);
+	global_free(all);
 }
