@@ -1,7 +1,6 @@
 .name		"Survivor"
 .comment	"Invincible"
 
-	zjmp	%:r1un
 	live	%1
 	fork	%1
 	zjmp	%:j1

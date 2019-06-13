@@ -6,13 +6,13 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:58:54 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 04:48:18 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 05:26:04 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static int 	label_distanse_mp(t_tokens *token, t_tokens *copyscan,
+static int	label_distanse_mp(t_tokens *token, t_tokens *copyscan,
 		int *k, t_tokens *s)
 {
 	int f;
@@ -27,7 +27,7 @@ static int 	label_distanse_mp(t_tokens *token, t_tokens *copyscan,
 	return (f);
 }
 
-static int 	label_distanse_m(t_tokens *token, t_list *parseng,
+static int	label_distanse_m(t_tokens *token, t_list *parseng,
 							t_all *all, t_tokens *s)
 {
 	t_tokens	*copyscan;
@@ -54,8 +54,7 @@ static int 	label_distanse_m(t_tokens *token, t_list *parseng,
 			break;
 		parseng = parseng->next;
 	}
-	if (!parseng)
-		unknown_label_error(all, s);
+	!parseng && unknown_label_error(all, s);
 	return (-r);
 }
 
@@ -103,8 +102,7 @@ static int 	label_distanse_p(t_list *parseng, t_all *all, t_tokens *token)
 			break;
 		parseng = parseng->next;
 	}
-	if (!parseng)
-		unknown_label_error(all, token);
+	!parseng && unknown_label_error(all, token);
 	return (r);
 }
 

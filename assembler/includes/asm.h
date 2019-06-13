@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/13 04:55:19 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 05:25:30 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int			last_check(t_all *all);
 void		print_errors(t_all *all, char *filename);
 int			memory_error(void);
 void		ft_error(t_all *all, t_er_type type, t_case_type reason);
-void		unknown_label_error(t_all *all, t_tokens *token);
+int			unknown_label_error(t_all *all, t_tokens *token);
 
 /*
  * работа с листами токинов

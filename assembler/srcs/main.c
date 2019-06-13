@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 04:18:52 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/13 04:22:53 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 05:10:05 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,12 @@ static void	assembler(char *file_name)
 	tmp = ft_strdup(file_name);
 	file_name = change_file_extension(file_name);
 	if ((all.fd = open(file_name, O_WRONLY | O_TRUNC | O_CREAT, 0644)) == -1)
-		exit(1);//	надо будет расширить
+	{
+		ft_printf("Error: couldn't create file %s\n", file_name);
+		free(tmp);
+		global_free(&all);
+		exit(1);
+	}
 	translate_into_byte_code(&all, tmp);
 	free(tmp);
 }
