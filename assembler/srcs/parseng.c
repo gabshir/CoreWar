@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 00:05:51 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 01:54:50 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,7 @@ void		ft_parseng(t_all *all, t_op a, t_operation op)
 	unsigned	j;
 	int 		f;
 	int			k;
+	char		c;
 
 	j = 0;
 	k = a.arg_q - 1;
