@@ -19,7 +19,8 @@ SRCDIR = srcs/
 OBJDIR = obj/
 
 FILES = main	assembler	error	op	parseng		tokens	cw_strsplit		\
-	calc	lable_distanse	operation_to_bytecode	parser_tools
+	calc	lable_distanse	operation_to_bytecode	parser_tools	\
+	global_free		error_tools
 OBJ = $(addprefix $(OBJDIR),$(addsuffix .o,$(FILES)))
 
 LIBFT = ../libft/libftprintf.a

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   global_free.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 04:17:13 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 04:32:32 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 06:22:14 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 static void	free_parseng(t_all *all)
 {
-	t_tokens *token;
-	t_tokens *next;
-	t_list	*next_parsing;
+	t_tokens	*token;
+	t_tokens	*next;
+	t_list		*next_parsing;
 
-	while(all->parsing)
+	while (all->parsing)
 	{
 		token = all->parsing->content;
-		while(token)
+		while (token)
 		{
 			free(token->str);
 			token->str = NULL;
@@ -43,7 +43,7 @@ void		global_free(t_all *all)
 
 	i = 0;
 	free(all->source);
-	while(all->split[i])
+	while (all->split[i])
 	{
 		free(all->split[i]);
 		all->split[i] = NULL;
@@ -54,7 +54,7 @@ void		global_free(t_all *all)
 	free_parseng(all);
 	if (all->errors)
 	{
-		while(all->errors)
+		while (all->errors)
 		{
 			next = all->errors->next;
 			free(all->errors);
