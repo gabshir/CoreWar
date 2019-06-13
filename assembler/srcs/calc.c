@@ -6,16 +6,16 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 04:15:08 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 06:29:44 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void	translate_to_bytecode(t_all *all, size_t size, unsigned l)
+void			translate_to_bytecode(t_all *all, size_t size, unsigned l)
 {
 	int8_t		i;
-	size_t 		k;
+	size_t		k;
 	char		c;
 
 	i = 0;
@@ -30,15 +30,15 @@ void	translate_to_bytecode(t_all *all, size_t size, unsigned l)
 	all->i += k;
 }
 
-void	name_and_comment(t_all *all, int f)
+static void		name_and_comment(t_all *all, int f)
 {
-	char *str;
-	unsigned start;
+	char		*str;
+	unsigned	start;
 
 	str = f == 1 ? all->prog_name : all->comment;
 	start = all->i;
 	all->i += f == 1 ? PROG_NAME_LENGTH : COMMENT_LENGTH;
-	while(*str)
+	while (*str)
 	{
 		all->source[start] = *str;
 		++start;
@@ -47,18 +47,18 @@ void	name_and_comment(t_all *all, int f)
 	all->i += 4;
 }
 
-unsigned	size_soure(t_list *parseng)
+static unsigned	size_soure(t_list *parseng)
 {
 	unsigned	size;
 	t_tokens	*token;
 	t_tokens	*copy;
 
 	size = 0;
-	while(parseng)
+	while (parseng)
 	{
 		token = parseng->content;
 		copy = token;
-		while(copy)
+		while (copy)
 		{
 			size += copy->size;
 			copy = copy->next;
@@ -68,7 +68,7 @@ unsigned	size_soure(t_list *parseng)
 	return (size);
 }
 
-void		translate_into_byte_code(t_all *all, char *file_name)
+void			translate_into_byte_code(t_all *all, char *file_name)
 {
 	unsigned	size;
 

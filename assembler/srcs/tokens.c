@@ -28,7 +28,7 @@ t_tokens	*ft_newtokens(t_all *all, t_type tp, int o, char size)
 	return (new);
 }
 
-void	ft_tokenspush(t_tokens **alst, t_tokens *new)
+void		ft_tokenspush(t_tokens **alst, t_tokens *new)
 {
 	t_tokens *list;
 
