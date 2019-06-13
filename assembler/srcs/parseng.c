@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 04:57:11 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 07:05:33 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*tablica(int c)
 
 	str = ft_memalloc(4);
 	i = 3;
-	while(c)
+	while (c)
 	{
 		str[--i] = c % 2;
 		c /= 2;
@@ -30,16 +30,16 @@ char	*tablica(int c)
 int		miniatoi(t_all *all)
 {
 	unsigned	i;
-	int 		s;
-	int 		f;
-	int 		l;
+	int			s;
+	int			f;
+	int			l;
 
 	s = 0;
 	l = 0;
 	i = all->i;
 	f = SPLIT[i] == '-' ? 1 : 0;
 	f ? ++i : 0;
-	while(SPLIT[i] && SPLIT[i] >= '0' && SPLIT[i] <= '9')
+	while (SPLIT[i] && SPLIT[i] >= '0' && SPLIT[i] <= '9')
 	{
 		s = s * 10 + SPLIT[i] - '0';
 		++i;
@@ -50,12 +50,12 @@ int		miniatoi(t_all *all)
 	return (s);
 }
 
-int scan_met(t_all *all)
+int		scan_met(t_all *all)
 {
 	unsigned		j;
 
 	j = 0;
-	while(LABEL_CHARS[j])
+	while (LABEL_CHARS[j])
 	{
 		if (SPLIT[all->i] != LABEL_CHARS[j])
 			++j;
@@ -68,7 +68,7 @@ int scan_met(t_all *all)
 static int	check_label_colon(t_all *all, unsigned i)
 {
 	unsigned	tmp_i;
-	
+
 	tmp_i = all->i;
 	if (SPLIT[i - 1] == LABEL_CHAR)
 		return (1);
@@ -81,14 +81,14 @@ static int	check_label_colon(t_all *all, unsigned i)
 	return (0);
 }
 
-void    checkmet(t_all *all, t_type	tp, char size, int *incorrect_lbl)
+void		checkmet(t_all *all, t_type tp, char size, int *incorrect_lbl)
 {
 	unsigned		j;
-	unsigned 		i;
+	unsigned		i;
 	t_tokens		*token;
-	int 			f;
+	int				f;
 
-	f = tp == LABEL ? 0 : 1; //если не метка то f == 1
+	f = tp == LABEL ? 0 : 1;
 	i = all->i;
 	if (f && SPLIT[all->i] != LABEL_CHAR)
 		ft_error(all, Syntactic, No_colon_before);
@@ -97,9 +97,9 @@ void    checkmet(t_all *all, t_type	tp, char size, int *incorrect_lbl)
 		++all->i;
 		i = all->i;
 	}
-	while(SPLIT[all->i] && SPLIT[all->i] != '\n')
+	while (SPLIT[all->i] && SPLIT[all->i] != '\n')
 	{
-		j = scan_met(all); //j == 0 запрщенный символ
+		j = scan_met(all);
 		if (!j)
 		{
 			if (!f && SPLIT[all->i] == LABEL_CHAR)
@@ -108,11 +108,11 @@ void    checkmet(t_all *all, t_type	tp, char size, int *incorrect_lbl)
 			|| SPLIT[all->i] == ALT_COMMENT_CHAR
 			|| SPLIT[all->i] == COMMENT_CHAR || SPLIT[all->i] == '\n'
 			|| SPLIT[all->i] == '\t') && f)
-				break;
+				break ;
 			else if ((*incorrect_lbl = check_label_colon(all, i)))
 			{
 				ft_error(all, Lexical, Wrong_lchar);
-				while (SPLIT[all->i] && SPLIT[all->i] != ',' && 
+				while (SPLIT[all->i] && SPLIT[all->i] != ',' &&
 					SPLIT[all->i] != ' ' && SPLIT[all->i] != '\t')
 					++all->i;
 			}
@@ -127,7 +127,7 @@ void    checkmet(t_all *all, t_type	tp, char size, int *incorrect_lbl)
 	ft_tokenspush(&all->temp, token);
 }
 
-void 	sep_char(t_all *all, int k)
+void		sep_char(t_all *all, int k)
 {
 	if (k > 0)
 	{
@@ -138,7 +138,7 @@ void 	sep_char(t_all *all, int k)
 	}
 }
 
-int 	ft_reg(t_all *all, int *k, char size)
+int			ft_reg(t_all *all, int *k, char size)
 {
 	int			s;
 	unsigned	i;
@@ -160,16 +160,16 @@ int 	ft_reg(t_all *all, int *k, char size)
 	return (1);
 }
 
-int vn_met(t_all *all, t_type tp, int k, char size)
+int		vn_met(t_all *all, t_type tp, int k, char size)
 {
 	int	incorrect_lbl;
-	
+
 	checkmet(all, tp, size, &incorrect_lbl);
 	sep_char(all, k);
 	return (1);
 }
 
-int ft_dir(t_all *all, int *k, t_operation op)
+int		ft_dir(t_all *all, int *k, t_operation op)
 {
 	unsigned	i;
 	t_tokens	*token;
@@ -198,7 +198,7 @@ int ft_dir(t_all *all, int *k, t_operation op)
 	return (1);
 }
 
-int ft_idir(t_all *all, int *k, char size)
+int		ft_idir(t_all *all, int *k, char size)
 {
 	unsigned i;
 	t_tokens *token;
@@ -218,12 +218,11 @@ int ft_idir(t_all *all, int *k, char size)
 	return (1);
 }
 
-
 void		ft_parseng(t_all *all, t_op a, t_operation op)
 {
 	char		*v;
 	unsigned	j;
-	int 		f;
+	int			f;
 	int			k;
 
 	j = 0;
@@ -246,7 +245,7 @@ void		ft_parseng(t_all *all, t_op a, t_operation op)
 			if (!f)
 			{
 				ft_error(all, Syntactic, Wrong_argument);
-				while (SPLIT[all->i] && SPLIT[all->i] != ',' && 
+				while (SPLIT[all->i] && SPLIT[all->i] != ',' &&
 					SPLIT[all->i] != ' ' && SPLIT[all->i] != '\t')
 					++all->i;
 			}
@@ -261,7 +260,6 @@ void			tokens(t_all *all)
 	t_op		a;
 	t_tokens	*token;
 	int			i;
-	// char 		size;
 	int			size;
 	int			incorrect_lbl;
 
@@ -288,7 +286,8 @@ void			tokens(t_all *all)
 		ft_error(all, Syntactic, Unknown_instr);
 		all->i = size;
 	}
-	size = i == live || i == zjmp || i == ffork || i == lfork || i == aff ? 1 : 2;
+	size = i == live || i == zjmp || i == ffork
+			|| i == lfork || i == aff ? 1 : 2;
 	token = ft_newtokens(all, INSTRUCTION, i, (char)size);
 	token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
 	ft_tokenspush(&all->temp, token);

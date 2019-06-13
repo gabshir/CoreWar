@@ -6,7 +6,7 @@
 /*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 03:43:59 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 03:43:59 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 06:55:48 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 {
 	t_tokens	*copy;
-	unsigned 	i;
+	unsigned	i;
 	char		c;
 
 	translate_to_bytecode(all, 1, token->operation + 1);
@@ -25,7 +25,7 @@ static void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 		copy = copy->next;
 		i = 0;
 		c = all->source[all->i];
-		while(copy)
+		while (copy)
 		{
 			copy->tp == DIRECT || copy->tp == DIRLABEL ? c |= 1 << (7 - i) : 0;
 			copy->tp == REGISTER ? c |= 1 << (6 - i) : 0;
@@ -47,12 +47,12 @@ static void		dop_code(int s, t_all *all, size_t size)
 	unsigned char	c;
 
 	f = s < 0 ? 1 : 0;
-	s < 0 ? s = -s  : 0;
+	s < 0 ? s = -s : 0;
 	translate_to_bytecode(all, size, s);
 	if (f == 1)
 	{
-		all->source[all->i - 2] =~ all->source[all->i - 2];
-		c =~ all->source[all->i - 1];
+		all->source[all->i - 2] = ~all->source[all->i - 2];
+		c = ~all->source[all->i - 1];
 		if (c == 0xff)
 			all->source[all->i - 2] += 1;
 		c += 1;
@@ -79,7 +79,7 @@ void			operation_to_bytecode(t_all *all)
 	t_tokens	*copytoken;
 
 	copy = all->parsing;
-	while(copy)
+	while (copy)
 	{
 		token = copy->content;
 		copytoken = token;

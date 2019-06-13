@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:58:54 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 04:57:11 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 06:33:58 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,18 @@ static int	label_distanse_m(t_tokens *token, t_list *parseng,
 		r += k;
 		k = 0;
 		if (f)
-			break;
+			break ;
 		parseng = parseng->next;
 	}
 	!parseng && unknown_label_error(all, s);
 	return (-r);
 }
 
-static int	label_distanse_pr(t_tokens	*copyscan, int *f, char *str)
+static int	label_distanse_pr(t_tokens *copyscan, int *f, char *str)
 {
 	int r;
 
 	r = 0;
-
 	while (copyscan)
 	{
 		r += copyscan->size;
@@ -77,7 +76,7 @@ static int	label_distanse_pr(t_tokens	*copyscan, int *f, char *str)
 	return (r);
 }
 
-static int 	label_distanse_p(t_list *parseng, t_all *all, t_tokens *token)
+static int	label_distanse_p(t_list *parseng, t_all *all, t_tokens *token)
 {
 	t_tokens	*copyscan;
 	int			r;
@@ -99,14 +98,14 @@ static int 	label_distanse_p(t_list *parseng, t_all *all, t_tokens *token)
 		copyscan = parseng->content;
 		r += label_distanse_pr(copyscan, &f, str);
 		if (f)
-			break;
+			break ;
 		parseng = parseng->next;
 	}
 	!parseng && unknown_label_error(all, token);
 	return (r);
 }
 
-int 		label_distance(t_tokens *token, t_all *all)
+int			label_distance(t_tokens *token, t_all *all)
 {
 	t_tokens	*copyscan;
 	int			r;
