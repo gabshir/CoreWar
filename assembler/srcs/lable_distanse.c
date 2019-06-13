@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lable_distanse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:58:54 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 03:02:19 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 04:48:18 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ static int 	label_distanse_m(t_tokens *token, t_list *parseng,
 			break;
 		parseng = parseng->next;
 	}
-	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
+	if (!parseng)
+		unknown_label_error(all, s);
 	return (-r);
 }
 
@@ -102,7 +103,8 @@ static int 	label_distanse_p(t_list *parseng, t_all *all, t_tokens *token)
 			break;
 		parseng = parseng->next;
 	}
-	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
+	if (!parseng)
+		unknown_label_error(all, token);
 	return (r);
 }
 

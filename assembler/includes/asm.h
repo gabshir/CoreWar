@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/13 03:49:06 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/13 04:48:55 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,26 @@ typedef struct			s_all
 	char			*source;
 }						t_all;
 
+
+void		readfile(t_all *all, char *file_name);
+
+/*
+**	Parser tools
+*/
+
+void		quick_pass(t_all *all);
+int			checkform(t_all *all);
+int			last_check(t_all *all);
+
+/*
+**	Errors
+*/
+
+void		print_errors(t_all *all, char *filename);
+int			memory_error(void);
+void		ft_error(t_all *all, t_er_type type, t_case_type reason);
+void		unknown_label_error(t_all *all, t_tokens *token);
+
 /*
  * работа с листами токинов
  */
@@ -133,15 +153,10 @@ t_tokens	*ft_newtokens(t_all *all, t_type tp, int o, char size);
 void		ft_tokenspush(t_tokens **alst, t_tokens *new);
 void		ft_tokensadd(t_tokens **alst, t_tokens *new);
 
-void		ft_error(t_all *all, t_er_type type, t_case_type reason);
-int			last_check(t_all *all);
-int			checkform(t_all *all);
 void		parseng(t_all *all);
-void		quick_pass(t_all *all);
 t_op		operations(t_all *all, int *i);
 
-void		print_errors(t_all *all, char *filename);
-int			memory_error(void);
+
 
 // void		assembler(t_all *all);
 char		**cw_strsplit(char *champ);

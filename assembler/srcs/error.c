@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 04:10:23 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/13 04:48:39 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@ int		memory_error(void)
 	ft_printf("ERROR: Couldn't allocate memory.\n");
 	exit(1);
 	return (1);
+}
+
+void	unknown_label_error(t_all *all, t_tokens *token)
+{
+	all->i = token->i - ft_strlen(token->str);
+	all->st = token->st;
+	ft_error(all, Semantic, Label_not_found);
 }
 
 static t_error	*create_error(t_all *all, t_er_type type, t_case_type reason)
