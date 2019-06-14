@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 17:21:22 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/14 21:32:06 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/14 23:27:39 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,13 @@ void	sep_char(t_all *all, int k)
 	}
 }
 
-int		vn_met(t_all *all, t_type tp, int k, char size)
+int		vn_met(t_all *all, t_type tp, int *k, char size)
 {
 	int	incorrect_lbl;
 
 	checkmet(all, tp, size, &incorrect_lbl);
-	sep_char(all, k);
+	sep_char(all, k[0]);
+	--k[0];
 	return (1);
 }
 

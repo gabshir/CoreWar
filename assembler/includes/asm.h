@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/29 21:47:20 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/14 21:38:20 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/14 23:28:20 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,10 +141,12 @@ int				ft_idir(t_all *all, int *k, char size);
 int				scan_met(t_all *all);
 int				check_label_colon(t_all *all, unsigned i);
 void			sep_char(t_all *all, int k);
-int				vn_met(t_all *all, t_type tp, int k, char size);
+int				vn_met(t_all *all, t_type tp, int *k, char size);
 void			unknown_instr_error(t_all *all, int *size);
 void			get_argument(t_all *all, int *k, t_operation op, \
 					unsigned char arg);
+int				bad_lbl_char_manage(t_all *all, int f, \
+					int *incorrect_lbl, int i);
 
 /*
 **	Errors

@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/14 21:30:47 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/14 22:45:44 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	tokens(t_all *all)
 	if (!a.cmd[0] && !incorrect_lbl)
 		unknown_instr_error(all, &size);
 	size = i == live || i == zjmp || i == ffork
-			|| i == lfork || i == aff ? 1 : 2;
+			|| i == lfork ? 1 : 2;
 	token = ft_newtokens(all, INSTRUCTION, i, (char)size);
 	token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
 	ft_tokenspush(&all->temp, token);

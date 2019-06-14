@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 19:08:46 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/11 07:04:18 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 23:44:51 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,6 @@ typedef struct	s_list
 	size_t			content_size;
 	struct s_list	*next;
 }				t_list;
-
-typedef struct	s_get
-{
-    t_list	*temp;
-    int		o;
-    char	*s;
-}				t_get;
 
 size_t			ft_strlen(const char *s);
 char			*ft_strdup(const char *s1);
@@ -117,7 +110,7 @@ char			*ft_strjoin_free(char *s1, char *s2, int operation);
 char			*ft_str_toupper(char *str);
 void			ft_swap(int *a, int *b);
 void			ft_uniswap(void *a, void *b, size_t size);
-size_t  		ft_strsplit_len(char **split);
+size_t			ft_strsplit_len(char **split);
 int				ft_printf(const char *format, ...);
 
 #endif
