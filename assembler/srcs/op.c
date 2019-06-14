@@ -6,13 +6,13 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/06/13 06:37:56 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 19:17:32 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-t_op	op_tab[17] =
+t_op	g_op_tab[17] =
 {
 	{"live", 1, {T_DIR}, 1, 10, "alive", 0, 0},
 	{"ld", 2, {T_DIR | T_IND, T_REG}, 2, 5, "load", 1, 0},
@@ -39,15 +39,15 @@ t_op	op_tab[17] =
 	{{0}, 0, {0}, 0, 0, {0}, 0, 0}
 };
 
-static void	operation_last(t_op v, t_all *all, int *i)
+static void	operation_last(t_op *v, t_all *all, int *i)
 {
-	if (v.cmd[0])
+	if (v->cmd[0])
 	{
 		{
-			if (SPLIT[all->i + ft_strlen((char *)v.cmd)] != ' ' &&
-				SPLIT[all->i + ft_strlen((char *)v.cmd)] != '\t')
+			if (SPLIT[all->i + ft_strlen((char *)v->cmd)] != ' ' &&
+				SPLIT[all->i + ft_strlen((char *)v->cmd)] != '\t')
 			{
-				ft_bzero(&v, sizeof(v));
+				ft_bzero(v, sizeof(v));
 				i[0] = -1;
 			}
 		}
@@ -57,31 +57,26 @@ static void	operation_last(t_op v, t_all *all, int *i)
 t_op		operations(t_all *all, int *i)
 {
 	char		*str;
-	unsigned	s;
-	unsigned	j;
-	unsigned	k;
+	unsigned	vars[3];
 	t_op		v;
 
-	k = all->i;
-	s = 0;
+	vars[0] = all->i;
+	vars[1] = 0;
 	ft_bzero(&v, sizeof(v));
-	while (s < 17)
+	while (vars[1] < 17)
 	{
-		all->i = k;
-		j = 0;
-		str = (char *)op_tab[s].cmd;
-		while (SPLIT[all->i] && str[j] && SPLIT[all->i] == str[j])
+		all->i = vars[0] - 1;
+		vars[2] = 0;
+		str = (char *)g_op_tab[vars[1]].cmd;
+		while (SPLIT[++all->i] && str[vars[2]] && SPLIT[all->i] == str[vars[2]])
+			++vars[2];
+		if (!str[vars[2]] && vars[1] < 16)
 		{
-			++all->i;
-			++j;
+			v = g_op_tab[vars[1]];
+			(*i) = vars[1];
 		}
-		if (!str[j] && s < 16)
-		{
-			v = op_tab[s];
-			i[0] = s;
-		}
-		++s;
+		++vars[1];
 	}
-	operation_last(v, all, i);
+	operation_last(&v, all, i);
 	return (v);
 }
