@@ -6,13 +6,13 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 06:29:44 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 20:02:59 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void			translate_to_bytecode(t_all *all, size_t size, unsigned l)
+void			translate_to_bytecode(t_all *all, size_t size, int l)
 {
 	int8_t		i;
 	size_t		k;

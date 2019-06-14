@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 04:23:39 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/13 04:24:23 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/14 18:30:19 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,42 @@ int		last_check(t_all *all)
 	}
 	all->i = 0;
 	return (0);
+}
+
+char	*tablica(int c)
+{
+	int		i;
+	char	*str;
+
+	SECURE_MALLOC(str = ft_memalloc(4));
+	i = 3;
+	while (c)
+	{
+		str[--i] = c % 2;
+		c /= 2;
+	}
+	return (str);
+}
+
+int		miniatoi(t_all *all)
+{
+	unsigned	i;
+	int			s;
+	int			f;
+	int			l;
+
+	s = 0;
+	l = 0;
+	i = all->i;
+	f = SPLIT[i] == '-' ? 1 : 0;
+	f ? ++i : 0;
+	while (SPLIT[i] && SPLIT[i] >= '0' && SPLIT[i] <= '9')
+	{
+		s = s * 10 + SPLIT[i] - '0';
+		++i;
+		l = 1;
+	}
+	!l && f ? ft_error(all, Lexical, Incorrect_int) : 0;
+	all->i = i;
+	return (s);
 }
