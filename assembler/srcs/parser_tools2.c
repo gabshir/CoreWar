@@ -6,13 +6,13 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 17:21:22 by jwillem-          #+#    #+#             */
-/*   Updated: 2019/06/14 20:16:18 by jwillem-         ###   ########.fr       */
+/*   Updated: 2019/06/14 21:32:06 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int	    scan_met(t_all *all)
+int		scan_met(t_all *all)
 {
 	unsigned		j;
 
@@ -27,7 +27,7 @@ int	    scan_met(t_all *all)
 	return (0);
 }
 
-int     check_label_colon(t_all *all, unsigned i)
+int		check_label_colon(t_all *all, unsigned i)
 {
 	unsigned	tmp_i;
 
@@ -61,4 +61,11 @@ int		vn_met(t_all *all, t_type tp, int k, char size)
 	checkmet(all, tp, size, &incorrect_lbl);
 	sep_char(all, k);
 	return (1);
+}
+
+void	unknown_instr_error(t_all *all, int *size)
+{
+	ft_uniswap(&all->i, size, sizeof(int));
+	ft_error(all, Syntactic, Unknown_instr);
+	all->i = *size;
 }
