@@ -160,7 +160,7 @@ char		**cw_strsplit(char *champ);
 void		translate_into_byte_code(t_all *all, char *file_name);
 
 int 		label_distance(t_tokens *token, t_all *all);
-void		translate_to_bytecode(t_all *all, size_t size, unsigned l);
+void		translate_to_bytecode(t_all *all, size_t size, int l);
 void		operation_to_bytecode(t_all *all);
 void		global_free(t_all *all);
 

@@ -113,7 +113,7 @@ void		print_errors(t_all *all, char *filename)
 		er_q++;
 		ptr = ptr->next;
 	}
-	global_free(all);
+	//global_free(all);
 	ft_printf("\n%d %s generated.\n", er_q, er_q > 1 ? "errors" : "error");
 	global_free(all);
 	exit(1);

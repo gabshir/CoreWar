@@ -6,15 +6,15 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 00:29:36 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 06:29:44 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 16:48:46 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void			translate_to_bytecode(t_all *all, size_t size, unsigned l)
+void			translate_to_bytecode(t_all *all, size_t size, int l)
 {
-	int8_t		i;
+	char		i;
 	size_t		k;
 	char		c;
 
@@ -22,7 +22,7 @@ void			translate_to_bytecode(t_all *all, size_t size, unsigned l)
 	k = size;
 	while (size)
 	{
-		c = (char)((l >> i) & 0xFF);
+		c = ((l >> i) & 0xFF);
 		all->source[all->i + size - 1] = c;
 		i += 8;
 		--size;
@@ -88,5 +88,5 @@ void			translate_into_byte_code(t_all *all, char *file_name)
 	write(1, file_name, ft_strlen(file_name) - 1);
 	write(1, "cor\n", 4);
 	write(all->fd, all->source, size);
-	global_free(all);
+	//global_free(all);
 }

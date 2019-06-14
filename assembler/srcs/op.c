@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2019/06/13 06:37:56 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 19:15:23 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ t_op	op_tab[17] =
 	{{0}, 0, {0}, 0, 0, {0}, 0, 0}
 };
 
-static void	operation_last(t_op v, t_all *all, int *i)
+static void	operation_last(t_op *v, t_all *all, int *i)
 {
-	if (v.cmd[0])
+	if (v->cmd[0])
 	{
 		{
-			if (SPLIT[all->i + ft_strlen((char *)v.cmd)] != ' ' &&
-				SPLIT[all->i + ft_strlen((char *)v.cmd)] != '\t')
+			if (SPLIT[all->i + ft_strlen((char *)v->cmd)] != ' ' &&
+				SPLIT[all->i + ft_strlen((char *)v->cmd)] != '\t')
 			{
-				ft_bzero(&v, sizeof(v));
+				ft_bzero(v, sizeof(v));
 				i[0] = -1;
 			}
 		}
@@ -82,6 +82,6 @@ t_op		operations(t_all *all, int *i)
 		}
 		++s;
 	}
-	operation_last(v, all, i);
+	operation_last(&v, all, i);
 	return (v);
 }

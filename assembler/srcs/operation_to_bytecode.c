@@ -6,7 +6,7 @@
 /*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 03:43:59 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 06:55:48 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 18:47:20 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 {
 	t_tokens	*copy;
 	unsigned	i;
-	char		c;
+	unsigned char	c;
 
 	translate_to_bytecode(all, 1, token->operation + 1);
 	if (token->size == 2)
@@ -43,21 +43,7 @@ static void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 
 static void		dop_code(int s, t_all *all, size_t size)
 {
-	int				f;
-	unsigned char	c;
-
-	f = s < 0 ? 1 : 0;
-	s < 0 ? s = -s : 0;
 	translate_to_bytecode(all, size, s);
-	if (f == 1)
-	{
-		all->source[all->i - 2] = ~all->source[all->i - 2];
-		c = ~all->source[all->i - 1];
-		if (c == 0xff)
-			all->source[all->i - 2] += 1;
-		c += 1;
-		all->source[all->i - 1] = c;
-	}
 }
 
 static void		convert_token_to_bytecode(t_all *all, t_tokens *copytoken)

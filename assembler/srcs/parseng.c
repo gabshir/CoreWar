@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/04 18:48:58 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/13 07:05:33 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 19:37:05 by gabshire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,12 @@ void		checkmet(t_all *all, t_type tp, char size, int *incorrect_lbl)
 		j = scan_met(all);
 		if (!j)
 		{
+			quick_pass(all);
 			if (!f && SPLIT[all->i] == LABEL_CHAR)
 				++all->i;
 			else if ((SPLIT[all->i] == SEPARATOR_CHAR
 			|| SPLIT[all->i] == ALT_COMMENT_CHAR
-			|| SPLIT[all->i] == COMMENT_CHAR || SPLIT[all->i] == '\n'
-			|| SPLIT[all->i] == '\t') && f)
+			|| SPLIT[all->i] == COMMENT_CHAR || SPLIT[all->i] == '\n') && f)
 				break ;
 			else if ((*incorrect_lbl = check_label_colon(all, i)))
 			{
@@ -265,13 +265,16 @@ void			tokens(t_all *all)
 
 	quick_pass(all);
 	i = -1;
+	incorrect_lbl = 0;
+	quick_pass(all);
 	a = operations(all, &i);
 	if (!a.cmd[0])
 	{
 		checkmet(all, LABEL, 0, &incorrect_lbl);
 		i = -1;
 		quick_pass(all);
-		if (!SPLIT[all->i] || SPLIT[all->i] == '\n')
+		if (!SPLIT[all->i] || SPLIT[all->i] == '\n' || SPLIT[all->i] == ALT_COMMENT_CHAR
+		|| SPLIT[all->i] == COMMENT_CHAR)
 		{
 			ft_lstpush(&all->parsing, ft_lstnew_ptr(all->temp));
 			all->temp = NULL;
@@ -287,12 +290,11 @@ void			tokens(t_all *all)
 		all->i = size;
 	}
 	size = i == live || i == zjmp || i == ffork
-			|| i == lfork || i == aff ? 1 : 2;
+			|| i == lfork ? 1 : 2;
 	token = ft_newtokens(all, INSTRUCTION, i, (char)size);
 	token->str = ft_strsub((char *)a.cmd, 0, ft_strlen((char *)a.cmd));
 	ft_tokenspush(&all->temp, token);
-	if (a.cmd[0])
-		ft_parseng(all, a, i);
+	a.cmd[0] ? ft_parseng(all, a, i) : 0;
 }
 
 void	parseng(t_all *all)
