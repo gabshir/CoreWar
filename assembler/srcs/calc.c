@@ -12,17 +12,17 @@
 
 #include "asm.h"
 
-void	translate_to_bytecode(t_all *all, size_t size, unsigned l)
+void			translate_to_bytecode(t_all *all, size_t size, int l)
 {
 	int8_t		i;
-	size_t 		k;
+	size_t		k;
 	char		c;
 
 	i = 0;
 	k = size;
 	while (size)
 	{
-		c = (uint8_t)((l >> i) & 0xFF);
+		c = (char)((l >> i) & 0xFF);
 		all->source[all->i + size - 1] = c;
 		i += 8;
 		--size;
@@ -30,15 +30,15 @@ void	translate_to_bytecode(t_all *all, size_t size, unsigned l)
 	all->i += k;
 }
 
-void	name_and_comment(t_all *all, int f)
+static void		name_and_comment(t_all *all, int f)
 {
-	char *str;
-	unsigned start;
+	char		*str;
+	unsigned	start;
 
 	str = f == 1 ? all->prog_name : all->comment;
 	start = all->i;
 	all->i += f == 1 ? PROG_NAME_LENGTH : COMMENT_LENGTH;
-	while(*str)
+	while (*str)
 	{
 		all->source[start] = *str;
 		++start;
@@ -47,145 +47,33 @@ void	name_and_comment(t_all *all, int f)
 	all->i += 4;
 }
 
-void		instruktion_to_bytecode(t_tokens *token, t_all *all)
-{
-	t_tokens	*copy;
-	unsigned 	i;
-	char		c;
-
-	translate_to_bytecode(all, 1, token->operation + 1);
-	if (token->size == 2)
-	{
-		copy = token;
-		copy = copy->next;
-		i = 0;
-		c = all->source[all->i];
-		while(copy)
-		{
-			copy->tp == DIRECT || copy->tp == DIRLABEL ? c |= 1 << (7 - i) : 0;
-			copy->tp == REGISTER ? c |= 1 << (6 - i) : 0;
-			if (copy->tp == INDIRECT || copy->tp == INDIRLABEL)
-			{
-				c |= 1 << (7 - i);
-				c |= 1 << (6 - i);
-			}
-			copy = copy->next;
-			i += 2;
-		}
-		all->source[all->i++] = c;
-	}
-}
-
-int 		label_distance(t_tokens *token, t_all *all)
-{
-	t_tokens	*copyscan;
-	int			r;
-	t_list		*parseng;
-
-	parseng = all->parsing;
-	while (parseng)
-	{
-		copyscan = parseng->content;
-		if ((!(ft_strcmp(copyscan->str, token->str))) && copyscan->tp == LABEL)
-			break ;
-		parseng = parseng->next;
-	}
-	!parseng ? ft_error(all, Semantic, Label_not_found) : 0;
-	if (copyscan->t_r > token->t_r)
-		r = copyscan->t_r;
-	else
-		{
-			if (copyscan->next)
-				copyscan = copyscan->next;
-			else
-			{
-				parseng = parseng->next;
-				copyscan = parseng->content;
-			}
-			r = token->t_r - copyscan->t_r;
-		}
-	return (r);
-}
-
-int 	dop_code(int s)
-{
-	if (s < 0)
-	{
-		s =~ s;
-		s += 1;
-	}
-	return (s);
-}
-
-void		operation_to_bytecode(t_all *all)
-{
-	t_list		*copy;
-	t_tokens	*token;
-	t_tokens	*copytoken;
-	int			r;
-
-	copy = all->parsing;
-	while(copy)
-	{
-		token = copy->content;
-		copytoken = token;
-		while (copytoken)
-		{
-			if (copytoken->tp == INSTRUCTION)
-				instruktion_to_bytecode(copytoken, all);
-			else if (copytoken->tp == REGISTER)
-			{
-				r = ft_atoi(copytoken->str);
-				translate_to_bytecode(all,copytoken->size, r);
-			}
-			else if (copytoken->tp == DIRECT || copytoken->tp == INDIRECT)
-			{
-				r = dop_code(ft_atoi(copytoken->str));
-				translate_to_bytecode(all, copytoken->size, r);
-			}
-			else if (copytoken->tp == DIRLABEL || copytoken->tp == INDIRLABEL)
-			{
-				r = label_distance(copytoken, all);
-				translate_to_bytecode(all, copytoken->size, dop_code(r));
-			}
-			copytoken = copytoken->next;
-		}
-		copy = copy->next;
-	}
-}
-
-unsigned	size_soure(t_list *parseng)
+static unsigned	size_soure(t_list *parseng)
 {
 	unsigned	size;
 	t_tokens	*token;
 	t_tokens	*copy;
 
 	size = 0;
-	while(parseng)
+	while (parseng)
 	{
 		token = parseng->content;
 		copy = token;
-		while(copy)
+		while (copy)
 		{
-			copy->tp == LABEL || copy->tp == DIRLABEL
-			|| copy->tp == INDIRLABEL ? copy->t_r = size : 0;
 			size += copy->size;
-			ft_printf("%s ", copy->str);
 			copy = copy->next;
 		}
-		ft_printf("\n");
 		parseng = parseng->next;
 	}
 	return (size);
 }
 
-
-void		translate_into_byte_code(t_all *all)
+void			translate_into_byte_code(t_all *all, char *file_name)
 {
 	unsigned	size;
 
 	all->prog_size = size_soure(all->parsing);
-	size = all->prog_size + PROG_NAME_LENGTH + COMMENT_LENGTH + 8;
+	size = all->prog_size + PROG_NAME_LENGTH + COMMENT_LENGTH + 16;
 	if (!(all->source = ft_strnew(size)))
 		return ;
 	all->i = 0;
@@ -194,5 +82,11 @@ void		translate_into_byte_code(t_all *all)
 	translate_to_bytecode(all, 4, all->prog_size);
 	name_and_comment(all, 0);
 	operation_to_bytecode(all);
+	if (all->errors)
+		print_errors(all, file_name);
+	ft_putstr("Writing output program to ");
+	write(1, file_name, ft_strlen(file_name) - 1);
+	write(1, "cor\n", 4);
 	write(all->fd, all->source, size);
+	global_free(all);
 }

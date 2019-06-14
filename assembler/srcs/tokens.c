@@ -24,12 +24,11 @@ t_tokens	*ft_newtokens(t_all *all, t_type tp, int o, char size)
 	new->i = all->i;
 	new->tp = tp;
 	new->operation = o;
-	new->t_r = 0;
 	new->size = size;
 	return (new);
 }
 
-void	ft_tokenspush(t_tokens **alst, t_tokens *new)
+void		ft_tokenspush(t_tokens **alst, t_tokens *new)
 {
 	t_tokens *list;
 
@@ -44,14 +43,4 @@ void	ft_tokenspush(t_tokens **alst, t_tokens *new)
 	}
 	else
 		*alst = new;
-}
-
-void	ft_tokensadd(t_tokens **alst, t_tokens *new)
-{
-	if (alst && new)
-	{
-		if (*alst)
-			new->next = *alst;
-		*alst = new;
-	}
 }

@@ -21,6 +21,8 @@
 # define ERROR_GREEN		"\x1b[92;1m"
 # define ERROR_WHITE		"\x1b[97;1m"
 
+# define SPLIT	all->split[all->st]
+
 typedef enum	e_er_type
 {
 	Lexical,
@@ -41,7 +43,7 @@ typedef enum	e_case_type
 	No_comma,
 	Unknown_instr,
 	No_last_line,
-	Label_not_found
+	Label_not_found,
 }				t_case_type;
 
 typedef struct	s_error
@@ -54,18 +56,18 @@ typedef struct	s_error
 	struct s_error	*next;
 }				t_error;
 
-typedef    enum    e_type
+typedef enum	e_type
 {
-	LABEL, // метка
-	INSTRUCTION, //инструкция
-	DIRECT, //директ
+	LABEL,
+	INSTRUCTION,
+	DIRECT,
 	DIRLABEL,
-	INDIRECT, // индерект
+	INDIRECT,
 	INDIRLABEL,
-	REGISTER //регистр
-}                t_type;
+	REGISTER
+}				t_type;
 
-typedef    enum    e_operation
+typedef enum	e_operation
 {
 	live,
 	ld,
@@ -83,37 +85,33 @@ typedef    enum    e_operation
 	lldi,
 	lfork,
 	aff
-}                t_operation;
+}				t_operation;
 
-typedef struct			s_tokens
+typedef struct	s_tokens
 {
-	char 				*str;
-	unsigned int		st;
-	unsigned int		i;
-	t_type				tp;
-	t_operation			operation;
-	char				size;
-	unsigned int		t_r;
-	struct 	s_tokens *next;
-}						t_tokens;
-
+	char			*str;
+	unsigned int	st;
+	unsigned int	i;
+	t_type			tp;
+	t_operation		operation;
+	char			size;
+	struct s_tokens	*next;
+}				t_tokens;
 
 /*
-* fd - файловый дискриптор
-* magic - магическое число
-* parseng - результат работы парсера
-* i - индекс в строке
-* st - номер строки
+** fd - файловый дискриптор
+** magic - магическое число
+** parseng - результат работы парсера
+** i - индекс в строке
+** st - номер строки
 */
 
-typedef struct			s_all
+typedef struct	s_all
 {
 	int				fd;
 	char			**split;
 	unsigned int	i;
 	unsigned int	st;
-	char			*line;
-	char			*pred_line;
 	unsigned int	magic;
 	char			prog_name[PROG_NAME_LENGTH + 1];
 	char			comment[COMMENT_LENGTH + 1];
@@ -122,28 +120,58 @@ typedef struct			s_all
 	t_tokens		*temp;
 	t_error			*errors;
 	char			*source;
-}						t_all;
+}				t_all;
+
+void			readfile(t_all *all, char *file_name);
 
 /*
- * работа с листами токинов
- */
+**	Parser tools
+*/
 
-t_tokens	*ft_newtokens(t_all *all, t_type tp, int o, char size);
-void		ft_tokenspush(t_tokens **alst, t_tokens *new);
-void		ft_tokensadd(t_tokens **alst, t_tokens *new);
+void			parseng(t_all *all);
+void			checkmet(t_all *all, t_type tp, char size, int *incorrect_lbl);
+void			quick_pass(t_all *all);
+int				checkform(t_all *all);
+int				last_check(t_all *all);
+char			*tablica(int c);
+int				miniatoi(t_all *all);
+int				ft_reg(t_all *all, int *k, char size);
+int				ft_dir(t_all *all, int *k, t_operation op);
+int				ft_idir(t_all *all, int *k, char size);
+int				scan_met(t_all *all);
+int				check_label_colon(t_all *all, unsigned i);
+void			sep_char(t_all *all, int k);
+int				vn_met(t_all *all, t_type tp, int *k, char size);
+void			unknown_instr_error(t_all *all, int *size);
+void			get_argument(t_all *all, int *k, t_operation op, \
+					unsigned char arg);
+int				bad_lbl_char_manage(t_all *all, int f, \
+					int *incorrect_lbl, int i);
 
-void		ft_error(t_all *all, t_er_type type, t_case_type reason);
-int			last_check(t_all *all, int f);
-int			checkform(t_all *all);
-void		parseng(t_all *all);
-void		quick_pass(t_all *all);
-t_op		operations(t_all *all, int *i);
+/*
+**	Errors
+*/
 
-void		print_errors(t_all *all, char *filename);
-int			memory_error(void);
+void			print_errors(t_all *all, char *filename);
+int				memory_error(void);
+void			ft_error(t_all *all, t_er_type type, t_case_type reason);
+int				unknown_label_error(t_all *all, t_tokens *token);
 
-// void		assembler(t_all *all);
-char		**cw_strsplit(char *champ);
-void		translate_into_byte_code(t_all *all);
+/*
+** работа с листами токинов
+*/
+
+t_tokens		*ft_newtokens(t_all *all, t_type tp, int o, char size);
+void			ft_tokenspush(t_tokens **alst, t_tokens *new);
+
+t_op			operations(t_all *all, int *i);
+
+char			**cw_strsplit(char *champ);
+void			translate_into_byte_code(t_all *all, char *file_name);
+
+int				label_distance(t_tokens *token, t_all *all);
+void			translate_to_bytecode(t_all *all, size_t size, int l);
+void			operation_to_bytecode(t_all *all);
+void			global_free(t_all *all);
 
 #endif
