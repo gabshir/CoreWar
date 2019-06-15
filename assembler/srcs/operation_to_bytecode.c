@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operation_to_bytecode.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabshire <gabshire@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 03:43:59 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/15 03:00:42 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 20:40:23 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 {
 	t_tokens	*copy;
 	unsigned	i;
-	unsigned char	c;
+	char		c;
 
 	translate_to_bytecode(all, 1, token->operation + 1);
 	if (token->size == 2)
@@ -41,11 +41,6 @@ static void		instruktion_to_bytecode(t_tokens *token, t_all *all)
 	}
 }
 
-static void		dop_code(int s, t_all *all, size_t size)
-{
-	translate_to_bytecode(all, size, s);
-}
-
 static void		convert_token_to_bytecode(t_all *all, t_tokens *copytoken)
 {
 	if (copytoken->tp == INSTRUCTION)
@@ -53,9 +48,10 @@ static void		convert_token_to_bytecode(t_all *all, t_tokens *copytoken)
 	else if (copytoken->tp == REGISTER)
 		translate_to_bytecode(all, copytoken->size, ft_atoi(copytoken->str));
 	else if (copytoken->tp == DIRECT || copytoken->tp == INDIRECT)
-		dop_code(ft_atoi(copytoken->str), all, copytoken->size);
+		translate_to_bytecode(all, copytoken->size, ft_atoi(copytoken->str));
 	else if (copytoken->tp == DIRLABEL || copytoken->tp == INDIRLABEL)
-		dop_code(label_distance(copytoken, all), all, copytoken->size);
+		translate_to_bytecode(all, copytoken->size, \
+			label_distance(copytoken, all));
 }
 
 void			operation_to_bytecode(t_all *all)

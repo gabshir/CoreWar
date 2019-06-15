@@ -1,0 +1,8 @@
+#for var in examples/be examples/bee_gees examples/bigzork examples/fluttershy examples/helltrain examples/Survivoro examples/turtle examples/zork
+for var in jumper Car Gagnant
+do
+./vm_champs/asm vm_champs/$var.s
+cp vm_champs/$var.cor ./$var.cor
+./asm vm_champs/$var.s
+diff ./$var.cor vm_champs/$var.cor
+done

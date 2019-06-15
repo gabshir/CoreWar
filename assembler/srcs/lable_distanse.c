@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:58:54 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/15 03:00:42 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 17:03:47 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ static int	label_distanse_m(t_tokens *token, t_list *parseng,
 
 	f = 0;
 	r = 0;
-	k = 0;
 	while (parseng)
 	{
+		k = 0;
 		copyscan = parseng->content;
 		while (copyscan)
 		{
@@ -49,7 +49,6 @@ static int	label_distanse_m(t_tokens *token, t_list *parseng,
 			copyscan = copyscan->next;
 		}
 		r += k;
-		k = 0;
 		if (f)
 			break ;
 		parseng = parseng->next;

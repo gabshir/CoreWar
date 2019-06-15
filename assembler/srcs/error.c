@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 19:55:57 by gabshire          #+#    #+#             */
-/*   Updated: 2019/06/15 03:00:42 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 17:08:04 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ void		print_errors(t_all *all, char *filename)
 		er_q++;
 		ptr = ptr->next;
 	}
-	//global_free(all);
 	ft_printf("\n%d %s generated.\n", er_q, er_q > 1 ? "errors" : "error");
 	global_free(all);
 	exit(1);

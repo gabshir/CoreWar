@@ -6,7 +6,7 @@
 /*   By: jwillem- <jwillem-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/06/15 03:00:42 by gabshire         ###   ########.fr       */
+/*   Updated: 2019/06/14 21:43:46 by jwillem-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,9 @@
 # define REG_SIZE	4
 # define DIR_SIZE	REG_SIZE
 
-
 # define REG_CODE	1
 # define DIR_CODE	2
 # define IND_CODE	3
-
 
 # define MAX_ARGS_NUMBER	4
 # define MAX_PLAYERS		4
@@ -54,7 +52,7 @@
 # define MAX_CHECKS		10
 
 /*
-**
+**	Argument types
 */
 
 typedef char	t_arg_type;
@@ -65,7 +63,7 @@ typedef char	t_arg_type;
 # define T_LAB	8
 
 /*
-**
+**	Name Comment Magic
 */
 
 # define PROG_NAME_LENGTH		(128)
@@ -73,15 +71,15 @@ typedef char	t_arg_type;
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
 /*
- * cmd - имя
- * arg_g кол арг
- * arg_type массив аргументов
- * opcode код операции
- * cycles циклы до исполнения
- * descrip короткое описание
- * a_typecode - код типов аргументов
- * dir_size размер т-дир
- */
+**	cmd - имя
+**	arg_g кол арг
+**	arg_type массив аргументов
+**	opcode код операции
+**	cycles циклы до исполнения
+**	descrip короткое описание
+**	a_typecode - код типов аргументов
+**	dir_size размер т-дир
+*/
 
 typedef struct	s_op
 {
