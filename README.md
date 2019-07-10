@@ -1,4 +1,4 @@
-CoreWar
+#CoreWar
 CoreWar for School 21 (42). Read more in corewar.en.pdf.
 
 What is Corewar?
